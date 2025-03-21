@@ -1,0 +1,233 @@
+body {
+    height: 100vh;
+    background-image: linear-gradient(#370C94, #0B0121);
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    height: 80px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: #0b012175; 
+    backdrop-filter: blur(10px); 
+    padding: 0 30px;
+}
+
+.logo-container {
+    
+    display: flex;
+    margin-left: 30px;
+    align-items: center;
+    justify-content: center; 
+}
+
+.logo-img {
+    
+    width: 100px; 
+    filter: invert(100%);
+   
+}
+
+.logo-text {
+    font-size: 30px;
+    font-family: Poppins;
+    font-weight: 700;
+    color: white;
+  
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+    margin-right: 50px;
+    text-align: center;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 20px;
+    padding: 5px;
+    transition: color 0.3s ease-in-out;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.24);
+    transition: color 0.8s;          
+}
+
+
+nav a.ctt {
+    border: 1px solid white;  
+    border-radius: 40px;
+    padding: 8px 30px; 
+    
+}
+
+.txt {
+    text-align: center;
+    font-family: Poppins;
+    font-size: 50px;
+    width: 50%;
+    margin: 0 auto; 
+    line-height: 1.2; 
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.514));
+    background-clip: text;
+    color: transparent;
+    font-weight: 600;
+    margin-top: 150px;
+}
+.txt2 {
+    text-align: center;
+    font-family: Poppins;
+    font-size: 20px;
+    width: 40%;
+    margin: 0 auto; 
+    line-height: 1.2; 
+    color: #ffffff77;
+    margin-top: 50px;
+}
+.scroll {
+    text-align: center;
+    font-size: 25px;
+    width: 40%;
+    font-family: Poppins;
+    font-weight: 200;
+    margin: 0 auto; 
+    line-height: 1.2; 
+    color: #ffffff;
+    margin-top: 120px;
+}
+section {
+    height: 90vh;
+    background: linear-gradient(to bottom, #370C94, #0B0121);
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    flex-direction: column;
+    padding-top: 100px;
+}
+
+
+main{
+    
+    background-color: #0B0121; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+}
+
+.scroll-img{
+    filter: invert(100%);
+    height: 70px;
+    
+}
+.txt3 {
+    text-align: center;
+    font-family: Poppins;
+    font-size: 40px;
+    width: 50%;
+    margin: 0 auto; 
+    line-height: 1.2; 
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.514));
+    background-clip: text;
+    color: transparent;
+    font-weight: 600;
+    margin-top: 150px;
+}
+
+
+.mov-container{
+margin-top: 150px;
+
+}
+.menu-mov{
+    justify-content: space-between;
+    display: flex;
+    width: 1200px;
+    align-items: center;
+}
+.fil-mun{
+    margin-top: 20px;
+    background-color: #370C94;
+    color: #fff;
+    font-family: Poppins;
+    align-items: center;
+    width: 120px;
+    font-weight: 600;
+    height: 30px;
+    border-style: none;
+    border-radius: 8px;
+}
+.seta{
+    height: 20px;
+    filter: invert(100%);
+}
+.graf{
+    margin-top: 50px;
+    height: 540px;
+}
+
+
+
+
+.carousel {
+    display: flex;
+    align-items: center;
+    background-color: #370C94;
+    width: 269px;
+    height: 61px;
+    justify-content: space-between;
+    border-radius: 10px;
+    gap: 10px;
+}
+
+.arrow {
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 2px;
+    user-select: none;
+}
+
+.years {
+    background-color: #0B0121;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 190px;
+    overflow: hidden;
+    gap: 10px;
+    width: 200px;
+    padding: 20px 30px;
+}
+
+.year {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    width: 50px;
+    transition: opacity 0.3s ease;
+}
+
+.prev, .next {
+    opacity: 0.3;
+}
+
+.current {
+    opacity: 1;}
