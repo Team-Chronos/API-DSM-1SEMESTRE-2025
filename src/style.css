@@ -1,14 +1,13 @@
 body {
-    height: 100vh;
+    font-family: Poppins;
+    height: 300vh;
     background-image: linear-gradient(#370C94, #0B0121);
     margin: 0;
-    font-family: Arial, sans-serif;
 }
 
 header {
-    position: fixed;
-    top: 0;
-    left: 0;
+    margin: 0;
+    font-family: Poppins;
     width: 100%;
     z-index: 1000;
     display: flex;
@@ -59,12 +58,16 @@ nav a {
     border-radius: 10px;
     font-size: 20px;
     padding: 5px;
-    transition: color 0.3s ease-in-out;
+   
 }
 
 nav a:hover {
-    background-color: rgba(255, 255, 255, 0.24);
-    transition: color 0.8s;          
+    border: 1px solid white;  
+    border-radius: 40px;
+    padding: 4px 15px; 
+    border: 1px solid white;  
+    border-radius: 40px;
+    transform:scale(1.2);
 }
 
 
@@ -99,6 +102,7 @@ nav a.ctt {
     margin-top: 50px;
 }
 .scroll {
+    
     text-align: center;
     font-size: 25px;
     width: 40%;
@@ -107,10 +111,10 @@ nav a.ctt {
     margin: 0 auto; 
     line-height: 1.2; 
     color: #ffffff;
-    margin-top: 120px;
+    margin-top: 117px;
 }
-section {
-    height: 90vh;
+.section1 {
+   
     background: linear-gradient(to bottom, #370C94, #0B0121);
     align-items: center;
     justify-content: center;
@@ -119,24 +123,18 @@ section {
     flex-direction: column;
     padding-top: 100px;
 }
-
-
-main{
-    
-    background-color: #0B0121; 
-    display: flex;
-    flex-direction: column;
+.section2 {
+   
+   background-color: #0B0121;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 30px;
+    flex-direction: column;
+    padding-top: 1px;
 }
 
-.scroll-img{
-    filter: invert(100%);
-    height: 70px;
-    
-}
+
 .txt3 {
     text-align: center;
     font-family: Poppins;
@@ -157,10 +155,14 @@ margin-top: 150px;
 
 }
 .menu-mov{
-    justify-content: space-between;
+    position:relative ;
+
     display: flex;
-    width: 1200px;
+    width: 80%;
+    left: 10%;
+    justify-content: space-between;
     align-items: center;
+    margin-bottom: 120px;
 }
 .fil-mun{
     margin-top: 20px;
@@ -179,17 +181,14 @@ margin-top: 150px;
     filter: invert(100%);
 }
 .graf{
-    margin-top: 50px;
-    height: 540px;
+    position: relative;
+    left: 20%;
+    width: 60%;
 }
-
-
-
 
 .carousel {
     display: flex;
     align-items: center;
-    background-color: #370C94;
     width: 269px;
     height: 61px;
     justify-content: space-between;
@@ -197,12 +196,26 @@ margin-top: 150px;
     gap: 10px;
 }
 
-.arrow {
+.arrowL {
     color: white;
+    background-color: #370C94;
     font-size: 15px;
     cursor: pointer;
-    padding: 2px;
+    padding: 20px 5px;
     user-select: none;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+}
+.arrowR {
+    color: white;
+    background-color: #370C94;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 20px 5px;
+    user-select: none;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .years {
@@ -231,3 +244,45 @@ margin-top: 150px;
 
 .current {
     opacity: 1;}
+
+::-webkit-scrollbar {
+    width: 1px;
+    background-color:black;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+.components-scroll-circle {
+    display: block;
+    margin-top: 40px;
+}
+
+.components-scroll-circle-icon {
+    background-color: #ffffff;
+    display: block;
+    height: 60px;
+    width: 1px;
+    margin: 10px auto;
+    position: relative;
+    transition: all 0.4s ease-out;
+}
+
+.components-scroll-circle-icon:before {
+    content: "";
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 1px solid #ffffff;
+    border-radius: 50%;
+    transform: translateX(-50%);
+}

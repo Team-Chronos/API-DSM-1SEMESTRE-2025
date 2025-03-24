@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <section>
     <header>
        
         <div class="logo-container">
@@ -25,43 +24,50 @@
             <a class="ctt" href="/python/" >Contatos</a>
         </nav>
     </header>
-      <p class="txt">
-            Estastísticas de Comércio Exterior do <br>Estado de São Paulo
-        </p>
-        <p class="txt2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.
-        </p>
-        <div class="scroll">
-            SCROLL
-            
-        </div>
-    </section>
     <main>
-        <img class="scroll-img" src="img/scroll-icon.svg">
-        
-        <h1 class="txt3">Movimentações realizadas entre 
-            2019 a 2024<br>
-            por município</h1>
-
-        <div class="mov-container"> 
-            <menu class="menu-mov">
-                <button class="fil-mun">Município <img src="img/seta.svg" class="seta"></button>
-                
-                <div class="carousel">
-                    <div class="arrow" id="prevArrow">◀</div>
-                    <div class="years">
-                        <div class="year prev">2019</div>
-                        <div class="year current">2020</div>
-                        <div class="year next">2021</div>
+        <section class="section1">
+                <p class="txt">
+                        Estastísticas de Comércio Exterior do <br>Estado de São Paulo
+                    </p>
+                    <p class="txt2">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.
+                    </p>
+                    <div class="scroll">
+                        SCROLL
+                        
                     </div>
-                    <div class="arrow" id="nextArrow">▶</div>
+        </section>
+        <section class="section2">
+                <a href="#apresentacao" class="components-scroll-circle js-scroll">
+                    
+                    
+                    <span class="components-scroll-circle-icon"></span>
+                </a>
+                
+                <h1 class="txt3">Movimentações realizadas entre 
+                    2019 a 2024<br>
+                    por município</h1>
+
+                <div class="mov-container"> 
+                    <menu class="menu-mov">
+                        <button class="fil-mun">Município <img src="img/seta.svg" class="seta"></button>
+                        
+                        <div class="carousel">
+                            <div class="arrowL" id="prevArrow">◀</div>
+                            <div class="years">
+                                <div class="year prev">2019</div>
+                                <div class="year current">2020</div>
+                                <div class="year next">2021</div>
+                            </div>
+                            <div class="arrowR" id="nextArrow">▶</div>
+                        </div>
+                    </menu>
+                    
+                    <iframe src="grafico_interativo.html" width="800" height="600" class="graf"></iframe>
+
+
                 </div>
-            </menu>
-            <center>
-            <iframe src="grafico_interativo.html" width="800" height="600"></iframe>
-
-
-        </div>
+        </section>
     </main>
 
 
