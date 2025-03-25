@@ -13,7 +13,7 @@ Esta projeto é uma API desenvolvida durante o primeiro semestre do curso de Des
 * <a href='#calendario'> Calendário da API </a>
 * <a href='#sprints'> Sprints </a>
 * <a href='#prototipo'> Protótipo </a>
-* <a href='#backlog'> Backlog do Produto </a>
+* <a href='#equipe'> Equipe </a>
 
 <br>
 
