@@ -1,4 +1,3 @@
-
 *{
     margin: 0;
     padding: 0;
@@ -29,7 +28,6 @@ header {
 }
 
 .logo-container {
-    
     display: flex;
     margin-left: 30px;
     align-items: center;
@@ -37,10 +35,8 @@ header {
 }
 
 .logo-img {
-    
     width: 100px; 
     filter: invert(100%);
-   
 }
 
 .logo-text {
@@ -48,7 +44,6 @@ header {
     font-family: Poppins;
     font-weight: 700;
     color: white;
-  
 }
 
 nav {
@@ -65,19 +60,16 @@ nav a {
     border-radius: 10px;
     font-size: 20px;
     padding: 5px;
-   
 }
 
 nav a:hover {
     transform: scale(1.1);
 }
 
-
 nav a.ctt {
     border: 1px solid white;  
     border-radius: 40px;
     padding: 8px 30px; 
-    
 }
 
 nav a.ctt:hover {
@@ -109,7 +101,6 @@ nav a.ctt:hover {
     margin-top: 50px;
 }
 .scroll {
-    
     text-align: center;
     font-size: 25px;
     width: 40%;
@@ -121,7 +112,6 @@ nav a.ctt:hover {
     margin-top: 117px;
 }
 .section1 {
-   
     background: linear-gradient(to bottom, #370C94, #0B0121);
     align-items: center;
     justify-content: center;
@@ -131,8 +121,7 @@ nav a.ctt:hover {
     padding-top: 100px;
 }
 .section2 {
-   
-   background-color: #0B0121;
+    background-color: #0B0121;
     align-items: center;
     justify-content: center;
     color: white;
@@ -140,7 +129,6 @@ nav a.ctt:hover {
     flex-direction: column;
     padding-top: 1px;
 }
-
 
 .txt3 {
     text-align: center;
@@ -156,15 +144,13 @@ nav a.ctt:hover {
     margin-top: 150px;
 }
 
-
 .mov-container{
-margin-top: 150px;
-margin-bottom: 150px;
-
+    margin-top: 150px;
+    margin-bottom: 150px;
 }
+
 .menu-mov{
     position:relative ;
-
     display: flex;
     width: 80%;
     left: 10%;
@@ -172,6 +158,7 @@ margin-bottom: 150px;
     align-items: center;
     margin-bottom: 120px;
 }
+
 .fil-mun{
     margin-top: 20px;
     background-color: #370C94;
@@ -184,15 +171,16 @@ margin-bottom: 150px;
     border-style: none;
     border-radius: 8px;
 }
+
 .seta{
     height: 20px;
     filter: invert(100%);
 }
+
 .graf{
     position: relative;
     left: 20%;
     width: 60%;
-    
 }
 
 .carousel {
@@ -214,8 +202,8 @@ margin-bottom: 150px;
     user-select: none;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-
 }
+
 .arrowR {
     color: white;
     background-color: #370C94;
@@ -252,7 +240,8 @@ margin-bottom: 150px;
 }
 
 .current {
-    opacity: 1;}
+    opacity: 1;
+}
 
 ::-webkit-scrollbar {
     width: 0px;
@@ -328,7 +317,6 @@ margin-bottom: 150px;
     margin: 0 20px;
 }
 
-
 .new-container {
     align-items: center;
     margin: 40px auto;
@@ -339,58 +327,53 @@ margin-bottom: 150px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.new-table {
-    width: 100%;
-    margin-top: 15px;
-    background-color: #ffffff10;
-    border-collapse: collapse;
-    border-radius: 10px;
-    
-}
-.new-table tr{
-    border-radius: 20px;
-}
-.new-table th{
-    padding: 10px;
-    border-collapse:collapse;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 20px;
-    background-color: #370C94;
-    font-weight: 200;
-    color: white;
-}
 
-.new-table td {
-    font-size: 15px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.05);;
-    font-weight: 200;
-    text-align: center;
-    color: white;
-}
 
 .dropdown {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    margin-left: 5%;
+    gap: 20px;
 }
 
 .dropdown label {
     color: white;
     font-size: 16px;
-    background-color: rgba(255, 255, 255, 0.05);
+
 }
 
-.dropdown select, .dropdown input  {
+.dropdown select{
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    background-color: #370C94;
+    color: white;
+}
+
+.dropdown input{
     padding: 8px;
     border-radius: 5px;
     border: none;
     background-color: #ffffff20;
     color: white;
 }
-.dropdown select:active{
+
+.dropdown select option {
+    background-color: #696969; 
+    color: #fff;
+}
+
+.dropdown select option:hover {
+    background-color: #370C94; 
+    color: white; 
+}
+.dropdown select:focus {
+    background-color: #370C94; 
+    border: 1px solid #999999;
+}
+
+.dropdown select:active {
     background-color: #ffffff20;
 }
 
