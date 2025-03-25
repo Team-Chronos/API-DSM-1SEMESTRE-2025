@@ -303,13 +303,95 @@ margin-bottom: 150px;
     margin: 10px auto;
     position: relative;
     transition: all 0.4s ease-out;
+    margin-bottom: 5%;
 }
-.line{
+/* Adicione isso ao seu arquivo CSS existente */
+
+.line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px; /* Espaço abaixo da linha */
+}
+
+.lineh {
+    width: 350px; /* Reduzi o tamanho das linhas horizontais */
+    border: 1px solid;
+    margin: 0 20px;
+    margin-top: 0px;
+}
+
+.linet {
+    font-size: 30px;
+    font-weight: 200;
+    text-align: center;
+    margin: 0 20px;
+}
+
+
+.new-container {
+    
+    align-items: center;
+    margin: 40px auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    width: 70%;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.new-table {
     width: 100%;
-   
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: #ffffff10;
+    
 }
-.lineh{
-    width: 30%;
-    padding: 0px;
-    display:inline-block;
+
+.new-table th, .new-table td {
+    padding: 12px;
+   
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.new-table th {
+    
+    background-color: #370C94;
+    font-weight: bold;
+    color: white;
+}
+
+.new-table tbody tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.new-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    transition: 0.3s;
+}
+
+.dropdown {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.dropdown label {
+    color: white;
+    font-size: 16px;
+}
+
+.dropdown select, .dropdown input {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    background-color: #ffffff20;
+    color: white;
+}
+
+.dropdown input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
 }
