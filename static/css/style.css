@@ -13,15 +13,16 @@ body {
 }
 
 header {
-   
+    position: fixed;
+    width: 100%;
     font-family: Poppins;
-    
     z-index: 1000;
     display: flex;
     justify-content: space-between; 
     align-items: center; 
     height: 80px;
-    border-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
     background-color: #0b012175; 
     backdrop-filter: blur(10px); 
     padding: 0 30px;
@@ -305,17 +306,16 @@ margin-bottom: 150px;
     transition: all 0.4s ease-out;
     margin-bottom: 5%;
 }
-/* Adicione isso ao seu arquivo CSS existente */
 
 .line {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 50px; /* Espaço abaixo da linha */
+    margin-bottom: 50px; 
 }
 
 .lineh {
-    width: 350px; /* Reduzi o tamanho das linhas horizontais */
+    width: 350px; 
     border: 1px solid;
     margin: 0 20px;
     margin-top: 0px;
@@ -330,7 +330,6 @@ margin-bottom: 150px;
 
 
 .new-container {
-    
     align-items: center;
     margin: 40px auto;
     background-color: rgba(255, 255, 255, 0.1);
@@ -342,34 +341,31 @@ margin-bottom: 150px;
 
 .new-table {
     width: 100%;
-    border-collapse: collapse;
     margin-top: 15px;
     background-color: #ffffff10;
+    border-collapse: collapse;
+    border-radius: 10px;
     
 }
 
-.new-table th, .new-table td {
-    padding: 12px;
-   
+.new-table th{
+    padding: 10px;
+    border-collapse:collapse;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-.new-table th {
-    
+    font-size: 20px;
     background-color: #370C94;
-    font-weight: bold;
+    font-weight: 200;
     color: white;
 }
 
-.new-table tbody tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.new-table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    transition: 0.3s;
+.new-table td {
+    font-size: 15px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.05);;
+    font-weight: 200;
+    text-align: center;
+    color: white;
 }
 
 .dropdown {
@@ -382,14 +378,18 @@ margin-bottom: 150px;
 .dropdown label {
     color: white;
     font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
-.dropdown select, .dropdown input {
+.dropdown select, .dropdown input  {
     padding: 8px;
     border-radius: 5px;
     border: none;
     background-color: #ffffff20;
     color: white;
+}
+.dropdown select:active{
+    background-color: #ffffff20;
 }
 
 .dropdown input::placeholder {
