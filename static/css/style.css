@@ -347,7 +347,9 @@ margin-bottom: 150px;
     border-radius: 10px;
     
 }
-
+.new-table tr{
+    border-radius: 20px;
+}
 .new-table th{
     padding: 10px;
     border-collapse:collapse;
