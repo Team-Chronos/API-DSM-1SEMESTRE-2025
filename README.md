@@ -2,7 +2,7 @@
 
 > Status: Em desenvolvimento ⚠️👷🏼 
 
-Esta projeto é uma API desenvolvida durante o primeiro semestre do curso de Desenvolvimento de Software Multiplataforma da Fatec de São José dos Campos para monitoramento de tendências de mercado no estado de São Paulo. Este projeto utiliza a metodologia ágil SCRUM, garantindo um desenvolvimento iterativo e colaborativo, tarefas organizadas em sprints, seguindo as prioridades definidas em um backlog estruturado com funcionalidades priorizadas.
+Esta projeto é uma API (Aprendizado por Projetos Integrados) desenvolvida durante o primeiro semestre do curso de Desenvolvimento de Software Multiplataforma da Fatec de São José dos Campos para monitoramento de tendências de mercado no estado de São Paulo. Este projeto utiliza a metodologia ágil SCRUM, garantindo um desenvolvimento iterativo e colaborativo, tarefas organizadas em sprints, seguindo as prioridades definidas em um backlog estruturado com funcionalidades priorizadas.
 
 <br>
 
