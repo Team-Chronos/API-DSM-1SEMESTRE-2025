@@ -221,4 +221,4 @@ fig.update_layout(
 
 
 # Exibir no navegador
-fig.write_html("./templates/grafico_interativo.html")
+fig.write_html(f"./templates/grafico_interativo{ano}.html")
