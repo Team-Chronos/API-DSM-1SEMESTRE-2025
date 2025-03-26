@@ -5,7 +5,7 @@ mun = 'https://balanca.economia.gov.br/balanca/bd/tabelas/UF_MUN.csv'
 sh4 = 'https://balanca.economia.gov.br/balanca/bd/tabelas/NCM_SH.csv'
 
 # Criando a variável de cidade e de ano(primeiros filtro)
-ano = 2024
+ano = 2019
 cidade = "Pirapozinho"
 
 if ano == 2024:
