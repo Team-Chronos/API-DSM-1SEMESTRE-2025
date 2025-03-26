@@ -2,7 +2,7 @@
 
 > Status: Em desenvolvimento ⚠️👷🏼 
 
-Esta projeto é uma API (Aprendizado por Projetos Integrados) desenvolvida durante o primeiro semestre do curso de Desenvolvimento de Software Multiplataforma da Fatec de São José dos Campos para monitoramento de tendências de mercado no estado de São Paulo. Este projeto utiliza a metodologia ágil SCRUM, garantindo um desenvolvimento iterativo e colaborativo, tarefas organizadas em sprints, seguindo as prioridades definidas em um backlog estruturado com funcionalidades priorizadas.
+Este projeto é uma API (Aprendizado por Projetos Integrados) desenvolvida durante o primeiro semestre do curso de Desenvolvimento de Software Multiplataforma da Fatec de São José dos Campos para monitoramento de tendências do mercado de importação e exportação no estado de São Paulo. Este projeto utiliza a metodologia ágil SCRUM, garantindo um desenvolvimento iterativo e colaborativo, tarefas organizadas em sprints, seguindo as prioridades definidas em um backlog estruturado com funcionalidades priorizadas.
 
 <br>
 
@@ -500,7 +500,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>Srum Team</h5>
+                <h5>Dev Team</h5>
             </td>
             <td>
                 <h5>Rebeca Lima</h5>
@@ -508,7 +508,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>Srum Team</h5>
+                <h5>Dev Team</h5>
             </td>
             <td>
                 <h5>João Vitor Moura</h5>
@@ -516,7 +516,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>Srum Team</h5>
+                <h5>Dev Team</h5>
             </td>
             <td>
                 <h5>Ana Julia Rubim</h5>
@@ -524,7 +524,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>Srum Team</h5>
+                <h5>Dev Team</h5>
             </td>
             <td>
                 <h5>Gabriel Lázaro</h5>
@@ -532,7 +532,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>Srum Team</h5>
+                <h5>Dev Team</h5>
             </td>
             <td>
                 <h5>Samuel Henrique</h5>
@@ -540,7 +540,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>Srum Team</h5>
+                <h5>Dev Team</h5>
             </td>
             <td>
                 <h5>Vitor Vieira</h5>
