@@ -380,3 +380,52 @@ nav a.ctt:hover {
 .dropdown input::placeholder {
     color: rgba(255, 255, 255, 0.7);
 }
+.new-table {
+    width: 100%;
+    border-collapse: separate 
+}
+
+
+.new-table thead {
+    display: table;
+    width: 100%;
+    background-color: #42208C;
+    color: white;
+    margin-bottom: 20px;
+}
+
+
+.new-table thead th {
+    padding: 10px;
+    text-align: center;
+}
+
+
+.new-table tbody {
+    display: block;
+    max-height: 400px; 
+    overflow-y: auto; 
+}
+
+
+.new-table tbody tr {
+   
+    width: 100%;
+    display: table; 
+    height: autos;
+    table-layout: fixed; 
+}
+
+
+.new-table tbody td {
+    padding: 20px;
+    background-color: #D0D0D080;
+    color: black;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 200;
+    font-size: 25px;
+    min-width: max-content;
+    white-space: nowrap;
+    overflow: hidden;
+}
