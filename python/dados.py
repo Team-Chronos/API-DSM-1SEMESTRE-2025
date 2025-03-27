@@ -3,9 +3,10 @@ import pandas as pd
 # importação das tabelas em CSV
 mun = 'https://balanca.economia.gov.br/balanca/bd/tabelas/UF_MUN.csv'
 sh4 = 'https://balanca.economia.gov.br/balanca/bd/tabelas/NCM_SH.csv'
+pais = 'https://balanca.economia.gov.br/balanca/bd/tabelas/PAIS.csv'
 
 # Criando a variável de cidade e de ano(primeiros filtro)
-ano = 2019
+ano = 2024
 cidade = "Pirapozinho"
 
 if ano == 2024:
@@ -37,11 +38,13 @@ ex_df = pd.read_csv(ex, sep=";", encoding="latin1")
 imp_df = pd.read_csv(imp, sep=";", encoding="latin1")
 mun_df = pd.read_csv(mun, sep=";", encoding="latin1")
 sh4_df = pd.read_csv(sh4, sep=";", encoding="latin1")
+pais_df = pd.read_csv(pais, sep=";", encoding="latin1")
 
 # Renomeando tabelas
 mun_df = mun_df.rename(columns={"CO_MUN_GEO": "CO_MUN"})
 sh4_df = sh4_df.rename(columns={"CO_SH4": "SH4", "NO_SH4_POR": "PRODUTO"})
 ex_df = ex_df.merge(mun_df, on=["CO_MUN"], how="left")
+ex_df = ex_df.merge(pais_df[['CO_PAIS', 'NO_PAIS']], on=["CO_PAIS"], how="left")
 imp_df = imp_df.merge(mun_df, on=["CO_MUN"], how="left")
 
 # Criando variáveis de exportação
@@ -222,3 +225,18 @@ fig.update_layout(
 
 # Exibir no navegador
 fig.write_html(f"./templates/grafico_interativo{ano}.html")
+
+# Filtro por produto de país
+produto = 901 # código SH4
+
+prod_mes = ex_df.loc[ex_sh4_ == produto]
+prod_mes = prod_mes[prod_mes["SG_UF_MUN"] == "SP"]
+
+prod_mes = prod_mes.merge(sh4_df[["SH4", "PRODUTO"]], on="SH4", how="left")
+
+display(prod_mes)
+
+top_10_paises = prod_mes.groupby("NO_PAIS")["KG_LIQUIDO"].sum().nlargest(10)
+top_10_paises_df = top_10_paises.reset_index()  # Transforma em DataFrame
+
+display(top_10_paises_df)
