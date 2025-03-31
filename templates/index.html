@@ -1,170 +1,176 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chronos</title>
-    <link rel="stylesheet" href="../static/css/style.css"> 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <header>
-       
-        <div class="logo-container">
-            <img class="logo-img" src="../static/img/logo.png" alt="Logo">
-            <p class="logo-text">Chronos</p>
-        </div>
-        <nav>
-            <a href="/html/">Home</a>
-            <a href="/css/">Movimentações</a>
-            <a href="/css/">Tabela</a>
-            <a href="/js/">Top 5</a>
-            <a class="ctt" href="/python/" >Contatos</a>
-        </nav>
+      <div class="logo-container">
+        <img class="logo-img" src="../static/img/logo.png" alt="Logo" />
+        <p class="logo-text">Chronos</p>
+      </div>
+      <nav>
+        <a href="/html/">Home</a>
+        <a href="/css/">Movimentações</a>
+        <a href="/css/">Tabela</a>
+        <a href="/js/">Top 5</a>
+        <a class="ctt" href="/python/">Contatos</a>
+      </nav>
     </header>
     <main>
-        <section class="section1">
-                <p class="txt">
-                        Estastísticas de Comércio Exterior do <br>Estado de São Paulo
-                    </p>
-                    <p class="txt2">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.
-                    </p>
-                    <div class="scroll">
-                        SCROLL
-                        
-                    </div>
-        </section>
-        <section class="section2">
-                <a href="#apresentacao" class="components-scroll-circle js-scroll">
-                    
-                    
-                    <span class="components-scroll-circle-icon"></span>
-                </a>
-                
-                <h1 class="txt3">Movimentações realizadas entre 
-                    2019 a 2024<br>
-                    por município</h1>
+      <section class="section1">
+        <p class="txt">
+          Estastísticas de Comércio Exterior do <br />Estado de São Paulo
+        </p>
+        <p class="txt2">
+          Esteja informado sobre as estatísticas de comércio exterior do estado
+          de São Paulo, com a análise e a mensuração das operações de exportação
+          realizadas pelo estado, um dos principais polos econômicos do Brasil.
+        </p>
+        <div class="scroll">SCROLL</div>
+      </section>
+      <section class="section2">
+        <a href="#apresentacao" class="components-scroll-circle js-scroll">
+          <span class="components-scroll-circle-icon"></span>
+        </a>
 
-                <div class="mov-container"> 
-                    <menu class="menu-mov">
-                        <button class="fil-mun">Município <img src="../static/img/seta.svg" class="seta"></button>
-                        
-                        <div class="carousel">
-                            <div class="arrowL" id="prevArrow">◀</div>
-                            <div class="years">
-                                <div class="year prev">2019</div>
-                                <div class="year current">2020</div>
-                                <div class="year next">2021</div>
-                            </div>
-                            <div class="arrowR" id="nextArrow">▶</div>
-                        </div>
-                    </menu>
-                    
-                    <iframe src="./grafico_interativo.html" width="800" height="600" class="graf"></iframe>
+        <h1 class="txt3">
+          Movimentações realizadas entre 2019 a 2024<br />
+          por município
+        </h1>
 
+        <div class="mov-container">
+          <menu class="menu-mov">
+            <button class="fil-mun">
+              Município <img src="../static/img/seta.svg" class="seta" />
+            </button>
 
-                </div>
-                
-                <span class="linev"></span>
-                <div class="line">
-                <hr class="lineh"><h1 class="linet">INFORMAÇÕES DE CARGA</h1><hr class="lineh"></div>
-                <div class="new-container">
-                    <div class="dropdown">
-                        <label for="new-year">Ano:</label>
-                        <select id="new-year">
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
-                            <option value="2020">2020</option>
-                            <option value="2019">2019</option>
-                        </select>
-                        <input type="text" placeholder="Pesquisar">
-                    </div>
-                    <table class="new-table">
-                        <thead>
-                            <tr>
-                                <th>Código</th>
-                                <th><span class="pro">Produto</span></th>
-                                <th>Município - UF</th>
-                                <th><span class="va">Valor<br>Agregado (R$)</span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>123456</td>
-                                <td>Açúcar refinado</td>
-                                <td>Ribeirão Preto - SP</td>
-                                <td>150.000,00</td>
-                            </tr>
-                            <tr>
-                                <td>789012</td>
-                                <td>Café em grão</td>
-                                <td>Santos - SP</td>
-                                <td>120.000,00</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            
-                            
-                        </tbody>
-                    </table>
-                </div>
-                
-        </section>
+            <div class="carousel">
+              <div class="arrowL" id="prevArrow">◀</div>
+              <div class="years">
+                <div class="year prev">2019</div>
+                <div class="year current">2020</div>
+                <div class="year next">2021</div>
+              </div>
+              <div class="arrowR" id="nextArrow">▶</div>
+            </div>
+          </menu>
+
+          <iframe
+            src="./grafico_interativo.html"
+            width="800"
+            height="600"
+            class="graf"
+          ></iframe>
+        </div>
+
+        <span class="linev"></span>
+        <div class="line">
+          <hr class="lineh" />
+          <h1 class="linet">INFORMAÇÕES DE CARGA</h1>
+          <hr class="lineh" />
+        </div>
+        <div class="new-container">
+          <div class="dropdown">
+            <label for="new-year">Ano:</label>
+            <select id="new-year">
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+              <option value="2022">2022</option>
+              <option value="2021">2021</option>
+              <option value="2020">2020</option>
+              <option value="2019">2019</option>
+            </select>
+            <input type="text" placeholder="Pesquisar" />
+          </div>
+          <table class="new-table">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th class="prod"><span class="pro">Produto</span></th>
+                <th>Município - UF</th>
+                <th>
+                  <span class="va">Valor<br />Agregado (R$)</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>123456</td>
+                <td>Açúcar refinado</td>
+                <td>Ribeirão Preto - SP</td>
+                <td>150.000,00</td>
+              </tr>
+              <tr>
+                <td>789012</td>
+                <td>Café em grão</td>
+                <td>Santos - SP</td>
+                <td>120.000,00</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
-
     <script>
-        const years = [2019, 2020, 2021, 2022, 2023, 2024]; 
-        let currentIndex = 1; 
+      const years = [2019, 2020, 2021, 2022, 2023, 2024];
+      let currentIndex = 1;
 
-        const prevArrow = document.getElementById("prevArrow");
-        const nextArrow = document.getElementById("nextArrow");
-        const yearsContainer = document.querySelector(".years");
+      const prevArrow = document.getElementById("prevArrow");
+      const nextArrow = document.getElementById("nextArrow");
+      const yearsContainer = document.querySelector(".years");
 
-        function updateYears() {
-            yearsContainer.innerHTML = `
+      function updateYears() {
+        yearsContainer.innerHTML = `
                 <div class="year prev">${years[currentIndex - 1] || ""}</div>
                 <div class="year current">${years[currentIndex]}</div>
                 <div class="year next">${years[currentIndex + 1] || ""}</div>
             `;
+      }
+
+      prevArrow.addEventListener("click", () => {
+        if (currentIndex > 0) {
+          currentIndex--;
+          updateYears();
         }
+      });
 
-        prevArrow.addEventListener("click", () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateYears();
-            }
-        });
+      nextArrow.addEventListener("click", () => {
+        if (currentIndex < years.length - 1) {
+          currentIndex++;
+          updateYears();
+        }
+      });
 
-        nextArrow.addEventListener("click", () => {
-            if (currentIndex < years.length - 1) {
-                currentIndex++;
-                updateYears();
-            }
-        });
-
-        updateYears(); 
+      updateYears();
     </script>
-</body>
+  </body>
 </html>
