@@ -326,7 +326,7 @@ nav a.ctt:hover {
   margin: 0 20px;
 }
 
-.new-container {
+.tab-container {
   align-items: center;
   margin: 40px auto;
   background-color: rgba(255, 255, 255, 0.1);
@@ -386,12 +386,12 @@ nav a.ctt:hover {
 .dropdown input::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
-.new-table {
+.tab {
   width: 100%;
   border-collapse: separate;
 }
 
-.new-table thead {
+.tab thead {
   display: flex;
   width: 100%;
   background-color: #42208c;
@@ -399,27 +399,27 @@ nav a.ctt:hover {
   margin-bottom: 20px;
 }
 
-.new-table thead th {
+.tab thead th {
   text-align: center;
   font-size: 20px;
   font-weight: 300;
   padding-left: 90px;
 }
 
-.new-table tbody {
+.tab tbody {
   display: block;
   max-height: 400px;
   overflow-y: auto;
 }
 
-.new-table tbody tr {
+.tab tbody tr {
   width: 100%;
   display: table;
   height: auto;
   table-layout: fixed;
 }
 
-.new-table tbody td {
+.tab tbody td {
   padding: 20px;
   background-color: #d0d0d080;
   color: black;

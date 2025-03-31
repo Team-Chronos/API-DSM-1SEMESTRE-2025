@@ -19,15 +19,15 @@
         <p class="logo-text">Chronos</p>
       </div>
       <nav>
-        <a href="/html/">Home</a>
-        <a href="/css/">Movimentações</a>
-        <a href="/css/">Tabela</a>
-        <a href="/js/">Top 5</a>
-        <a class="ctt" href="/python/">Contatos</a>
+        <a href="#home">Home</a>
+        <a href="#mov">Movimentações</a>
+        <a href="#tab">Tabela</a>
+        <a href="">Top 5</a>
+        <a class="ctt" href="">Contatos</a>
       </nav>
     </header>
     <main>
-      <section class="section1">
+      <section class="section1" id="home">
         <p class="txt">
           Estastísticas de Comércio Exterior do <br />Estado de São Paulo
         </p>
@@ -48,7 +48,7 @@
           por município
         </h1>
 
-        <div class="mov-container">
+        <div class="mov-container" id="mov">
           <menu class="menu-mov">
             <button class="fil-mun">
               Município <img src="../static/img/seta.svg" class="seta" />
@@ -79,7 +79,7 @@
           <h1 class="linet">INFORMAÇÕES DE CARGA</h1>
           <hr class="lineh" />
         </div>
-        <div class="new-container">
+        <div class="tab-container" id="tab"> 
           <div class="dropdown">
             <label for="new-year">Ano:</label>
             <select id="new-year">
@@ -92,7 +92,7 @@
             </select>
             <input type="text" placeholder="Pesquisar" />
           </div>
-          <table class="new-table">
+          <table class="tab">
             <thead>
               <tr>
                 <th>Código</th>
