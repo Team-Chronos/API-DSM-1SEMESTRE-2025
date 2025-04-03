@@ -7,12 +7,13 @@ Este projeto é uma API (Aprendizado por Projetos Integrados) desenvolvida duran
 <br>
 
 ## 📝 Índice
-* <a href='#projeto'> O Projeto </a>
+* <a href='#projeto'> Sobre o Projeto </a>
 * <a href='#requisitos'> Requisitos </a>
 * <a href='#tecnologias'> Tecnologias Utilizadas </a>
 * <a href='#calendario'> Calendário da API </a>
 * <a href='#sprints'> Sprints </a>
 * <a href='#prototipo'> Protótipo </a>
+* <a href='#backlog'> Backlog do Produto </a>
 * <a href='#equipe'> Equipe </a>
 
 <br>
@@ -117,7 +118,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>10/03/2025 - 30/03/2025</h5>
             </td>
             <td>
-                <h5>Em Andamento</h5>
+                <h5>Concluído</h5>
             </td>
         </tr>
         <tr>
@@ -128,7 +129,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>31/03/2025 - 04/04/2025</h5>
             </td>
             <td>
-                <h5>Não Iniciado</h5>
+                <h5>Em Andamento</h5>
             </td>
         </tr>
         <tr>
@@ -206,11 +207,11 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
       
 - [✅] Definição de variáveis;
 
-- [❎] Realização da raspagem de dados;
+- [✅] Realização da raspagem de dados;
 
-- [❎] Implementação do Colab.
+- [✅] Implementação do Colab.
 
-- [❎] Implementação de filtros e gráficos funcionais.
+- [✅] Implementação de filtros e gráficos funcionais.
 
 <br>
  
@@ -243,7 +244,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 
 ## 📊 Backlog do Produto
 #### Clique no link abaixo para visualizar o backlog do produto. 
-> [Backlog do Produto](#)
+> [Backlog do Produto](https://docs.google.com/spreadsheets/d/1-0Zh1v0vcnkfRN7rujErL-irl_QGm3Aw/edit?usp=sharing&ouid=114130650311490093569&rtpof=true&sd=true)
 
 <details>
     <summary>Backlog - Sprint 1</summary>
@@ -487,7 +488,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>Scrum Master</h5>
             </td>
             <td>
-                <h5>Rafael Sette</h5>
+                <h5>Enzo Gabriel</h5>
             </td>
         </tr>
         <tr>
@@ -495,7 +496,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>Product Owner</h5>
             </td>
             <td>
-                <h5>Enzo Gabriel</h5>
+                <h5>Rafael Sette</h5>
             </td>
         </tr>
         <tr>
