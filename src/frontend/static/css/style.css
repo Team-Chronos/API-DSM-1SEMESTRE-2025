@@ -3,14 +3,16 @@
   padding: 0;
   font-family: Poppins;
 }
+main{
+  background-color: #0b0121;
+}
 body {
   font-family: Poppins;
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   background-image: linear-gradient(#370c94, #0b0121);
   margin: 0;
 }
-
 header {
   position: fixed;
   width: 100%;
@@ -133,7 +135,6 @@ nav a.ctt:hover {
   flex-direction: column;
   padding-top: 1px;
 }
-
 .txt3 {
   text-align: center;
   font-family: Poppins;
@@ -151,7 +152,23 @@ nav a.ctt:hover {
   font-weight: 600;
   margin-top: 150px;
 }
-
+.txt4 {
+  text-align: center;
+  font-family: Poppins;
+  font-size: 30px;
+  width: 40%;
+  margin: 0 auto;
+  line-height: 1.2;
+  background: linear-gradient(
+    to  right bottom,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0.514)
+  );
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+  margin-top: 50px;
+}
 .mov-container {
   margin-top: 150px;
   margin-bottom: 150px;
@@ -168,16 +185,15 @@ nav a.ctt:hover {
 }
 
 .fil-mun {
-  margin-top: 20px;
-  background-color: #370c94;
-  color: #fff;
-  font-family: Poppins;
-  align-items: center;
-  width: 120px;
-  font-weight: 600;
+  margin-top: 30px;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
   height: 30px;
-  border-style: none;
-  border-radius: 8px;
+  font-size: 15px;
+  background-color: #370c94;
+  color: white;
+  width: 125px;
 }
 
 .seta {
@@ -228,7 +244,6 @@ nav a.ctt:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 190px;
   overflow: hidden;
   gap: 20px;
   width: 200px;
@@ -329,8 +344,9 @@ nav a.ctt:hover {
 .tab-container {
   align-items: center;
   margin: 40px auto;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #161616;
   padding: 20px;
+  padding-bottom: 0px;
   width: 70%;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
@@ -386,48 +402,181 @@ nav a.ctt:hover {
 .dropdown input::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
-.tab {
+
+table.tab {
   width: 100%;
+  margin: 0px auto;
   border-collapse: separate;
+  border-spacing: 0px 30px;
+  font-family: sans-serif;
 }
 
-.tab thead {
-  display: flex;
-  width: 100%;
-  background-color: #42208c;
+table.tab thead {
+  background-color: #4b1c78;
   color: white;
-  margin-bottom: 20px;
+
 }
 
-.tab thead th {
+table.tab thead th {
+  padding: 10px;
+  font-size: 23px;
   text-align: center;
-  font-size: 20px;
-  font-weight: 300;
-  padding-left: 90px;
+  font-weight: 200;
 }
 
-.tab tbody {
-  display: block;
-  max-height: 400px;
-  overflow-y: auto;
+table.tab thead th:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 
-.tab tbody tr {
+table.tab thead th:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+table.tab tbody td {
+  text-align: center;
+  vertical-align: middle;
+}
+table.tab tbody td > div {
+  margin: 0px 10px; 
+  padding: 10px;
+  border: 2px#D0D0D080;
+  background-color: #D0D0D080;
+  color: white;
+  border-radius: 8px;
+  color: #272727;
+  font-size: 25px;
+  font-weight: 400;
+  text-align: center;
+}
+.tob-container {
+
+  margin: 40px auto;
+  background-color: #161616;
+  padding-bottom: 10px;
+  width: 70%;
+  border-radius: 20px;
+}
+.menu-top{
+  margin: 50px;
+  align-items: center;
+  text-align: right;
+
+}
+.fil-mun-top {
+  margin-top: 30px;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  height: 30px;
+  font-size: 15px;
+  background-color: #370c94;
+  color: white;
+  width: 125px;
+}
+.new-year {
+  margin-top: 30px;
+  padding: 5px;
+  margin-right: 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 15px;
+  height: 30px;
+  background-color: #370c94;
+  color: white;
+  width: 125px;
+}
+.bar-chart {
   width: 100%;
-  display: table;
-  height: auto;
-  table-layout: fixed;
+  max-width: 900px;
+  font-family: sans-serif;
+  margin: 20px auto;
+  display: flex;
+  
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
 }
 
-.tab tbody td {
-  padding: 20px;
-  background-color: #d0d0d080;
-  color: black;
-  border-radius: 6px;
+.chart-row {
+  display: flex;
+  
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.label {
+  width: 100px;
+  margin-right: 30px;
+  font-weight: 200;
+}
+
+.bar {
+  height: 55px;
+  background-color: #370C94;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.x-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 100px; 
+  margin-top: 10px;
+  font-size: 12px;
+  color: #555;
+}
+footer {
+  width: 100%;
+  background-color: #0b0121;
+  color: white;
   text-align: center;
-  font-weight: 300;
+  font-family: Poppins;
+  display: flex;
+  padding-top: 20px;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0px;
+}
+hr{
+  width:99.9%;
+}
+.txt5{
+  font-size: 40px;
+  font-weight: 200;
+  text-align: center;
+  font-family: Poppins;
+}
+.txt6 {
+  text-align: center;
+  font-family: Poppins;
   font-size: 20px;
-  min-width: max-content;
-  white-space: nowrap;
-  overflow: hidden;
+  width: 40%;
+  line-height: 1.2;
+  color: #ffffff77;
+  
+}
+.txt7 {
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+  font-family: Poppins;
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid white;
+  border-radius: 40px;
+  width: 20%;
+}
+.txt7:hover {
+  background-color: white;
+  color: #370c94;
+}
+.direi{
+  background-color:#161616;
+  color: white;
+  font-weight: 100;
+  width: 100%;
+  font-size: 20px;
 }
