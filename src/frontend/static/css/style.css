@@ -493,7 +493,6 @@ table.tab tbody td > div {
   font-family: sans-serif;
   margin: 20px auto;
   display: flex;
-  
   flex-direction: column;
   gap: 20px;
   text-align: left;
@@ -501,7 +500,7 @@ table.tab tbody td > div {
 
 .chart-row {
   display: flex;
-  
+  font-size: 15px;
   align-items: center;
   margin-bottom: 10px;
 }
@@ -513,7 +512,7 @@ table.tab tbody td > div {
 }
 
 .bar {
-  height: 55px;
+  height: 30px;
   background-color: #370C94;
   border-radius: 4px;
   transition: width 0.3s ease;
@@ -522,7 +521,7 @@ table.tab tbody td > div {
 .x-axis {
   display: flex;
   justify-content: space-between;
-  margin-left: 100px; 
+  margin-left: 130px; 
   margin-top: 10px;
   font-size: 12px;
   color: #555;
@@ -540,9 +539,7 @@ footer {
   align-items: center;
   margin-bottom: 0px;
 }
-hr{
-  width:99.9%;
-}
+
 .txt5{
   font-size: 40px;
   font-weight: 200;
@@ -578,5 +575,5 @@ hr{
   color: white;
   font-weight: 100;
   width: 100%;
-  font-size: 20px;
+  font-size: 10px;
 }
