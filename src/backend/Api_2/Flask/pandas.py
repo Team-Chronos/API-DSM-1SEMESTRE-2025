@@ -1,96 +1,98 @@
 import pandas as pd
+import plotly.graph_objects as go
+from conexao import Exportacao, Importacao, Municipio, Pais, TipoCarga
+from conexao import db, flask_app, processar_dados, calcular_totais_mensais
 
-# Link dos arquivos CSV auxiliares
-mun = 'https://balanca.economia.gov.br/balanca/bd/tabelas/UF_MUN.csv'
-sh4 = 'https://balanca.economia.gov.br/balanca/bd/tabelas/NCM_SH.csv'
-pais = 'https://balanca.economia.gov.br/balanca/bd/tabelas/PAIS.csv'
+cidade = 'São Paulo'  
+ano = 2023    
 
-# Lendo os arquivos com o pandas
-mun_df = pd.read_csv(mun, sep=";", usecols=['CO_MUN_GEO', 'NO_MUN_MIN'], encoding="latin1")
-sh4_df = pd.read_csv(sh4, sep=";", usecols=['CO_SH4', 'NO_SH4_POR'], encoding="latin1")
-pais_df = pd.read_csv(pais, sep=";", usecols=['CO_PAIS', 'NO_PAIS'], encoding="latin1")
+with flask_app.app_context():
+    
+    exp_df = pd.read_sql(Exportacao.query.statement, db.session.bind)
+    imp_df = pd.read_sql(Importacao.query.statement, db.session.bind)
+    mun_df = pd.read_sql(Municipio.query.statement, db.session.bind)
+    pais_df = pd.read_sql(Pais.query.statement, db.session.bind)
+    tipo_df = pd.read_sql(TipoCarga.query.statement, db.session.bind)
 
-# Renomeação de alguns campos dessas tabelas para melhor entendimento
-mun_df = mun_df.rename(columns={"CO_MUN_GEO": "CO_MUN"})
-sh4_df = sh4_df.rename(columns={"CO_SH4": "SH4", "NO_SH4_POR": "TIPO_CARGA"})
+    exp_df = exp_df[(exp_df['uf'] == 'SP') & (exp_df['kg_liquido'] > 0) & (exp_df['co_pais'] != 0)]
+    imp_df = imp_df[(imp_df['uf'] == 'SP') & (imp_df['kg_liquido'] > 0) & (imp_df['co_pais'] != 0)]
 
-resultado = []
-for a in range(13, 24 + 1):  # de 2013 a 2024
-    ex = f'https://balanca.economia.gov.br/balanca/bd/comexstat-bd/mun/EXP_20{a}_MUN.csv'
-    print(f'Processando ano: 20{a}')
+    mun_df = mun_df.rename(columns={'co_mun': 'CO_MUN', 'nome': 'NO_MUN_MIN'})
+    pais_df = pais_df.rename(columns={'co_pais': 'CO_PAIS', 'nome': 'NO_PAIS'})
+    tipo_df = tipo_df.rename(columns={'sh4': 'SH4', 'tipo': 'TIPO_CARGA'})
 
-    try:
-        for chunk in pd.read_csv(ex, sep=';', encoding='latin1', chunksize=100000):
-            filtro = chunk[
-                (chunk['SG_UF_MUN'] == 'SP') &
-                (chunk['KG_LIQUIDO'] > 0) &
-                (chunk['CO_PAIS'] != 0)
-            ]
+    for name, df in zip(['exp_df', 'imp_df'], [exp_df, imp_df]):
+        df.rename(columns={'co_mun': 'CO_MUN', 'co_pais': 'CO_PAIS', 'sh4': 'SH4'}, inplace=True)
+        df = df.merge(mun_df, on='CO_MUN', how='left')
+        df = df.merge(pais_df, on='CO_PAIS', how='left')
+        df = df.merge(tipo_df, on='SH4', how='left')
 
-            # Merge com municípios
-            filtro = filtro.merge(mun_df[['CO_MUN', 'NO_MUN_MIN']].drop_duplicates(), on='CO_MUN', how='left')
+        df['VALOR_AGREGADO'] = df['valor_fob'] / df['kg_liquido']
+        df['VALOR_AGREGADO_FORMATADO'] = df['VALOR_AGREGADO'].apply(lambda x: f"{x:,.2f}")
 
-            # Merge com países
-            filtro = filtro.merge(pais_df[['CO_PAIS', 'NO_PAIS']].drop_duplicates(), on='CO_PAIS', how='left')
+        if name == 'exp_df':
+            exp_df = df
+        else:
+            imp_df = df
 
-            # Merge com tipo de carga
-            filtro = filtro.merge(sh4_df[['SH4', 'TIPO_CARGA']].drop_duplicates(), on='SH4', how='left')
+    print(exp_df.sample(5))
+    print(imp_df.sample(5))
 
-            # Calcula valor agregado
-            filtro['VALOR_AGREGADO'] = filtro['VL_FOB'] / filtro['KG_LIQUIDO']
-            filtro["VALOR_AGREGADO_FORMATADO"] = filtro["VALOR_AGREGADO"].apply(lambda x: f"{x:,.2f}")
+    exp_df = exp_df[(exp_df['uf'] == 'SP') & (exp_df['kg_liquido'] > 0) & (exp_df['co_pais'] != 0)]
+    imp_df = imp_df[(imp_df['uf'] == 'SP') & (imp_df['kg_liquido'] > 0) & (imp_df['co_pais'] != 0)]
 
-            # Organiza as colunas porque organização é importante
-            filtro.insert(filtro.columns.get_loc("CO_MUN") + 1, "NO_MUN_MIN", filtro.pop("NO_MUN_MIN"))
-            filtro.insert(filtro.columns.get_loc("CO_PAIS") + 1, "NO_PAIS", filtro.pop("NO_PAIS"))
-            filtro.insert(filtro.columns.get_loc("SH4") + 1, "TIPO_CARGA", filtro.pop("TIPO_CARGA"))
+    mun_df = mun_df.rename(columns={'co_mun': 'CO_MUN', 'nome': 'NO_MUN_MIN'})
+    pais_df = pais_df.rename(columns={'co_pais': 'CO_PAIS', 'nome': 'NO_PAIS'})
+    tipo_df = tipo_df.rename(columns={'sh4': 'SH4', 'tipo': 'TIPO_CARGA'})
 
-            resultado.append(filtro)
+    exp_df = processar_dados(exp_df, mun_df, pais_df, tipo_df)
+    imp_df = processar_dados(imp_df, mun_df, pais_df, tipo_df)
 
-    except Exception as e:
-        print(f'Erro no ano 20{a}:', e)
+    print(exp_df.sample(5))
+    print(imp_df.sample(5))
 
-# Junta tudo no final, já limpo
-ex_df = pd.concat(resultado, ignore_index=True)
+    exp_html = exp_df.to_html(index=False, classes='table table-striped', border=0)
+    imp_html = imp_df.to_html(index=False, classes='table table-striped', border=0)
 
-resultado = []
-for a in range(13, 24 + 1):  # de 2013 a 2024
-    im = f'https://balanca.economia.gov.br/balanca/bd/comexstat-bd/mun/IMP_20{a}_MUN.csv'
-    print(f'Processando ano: 20{a}')
+    with open("exportacoes_tabela.html", "w", encoding="utf-8") as f:
+        f.write(exp_html)
 
-    try:
-        for chunk in pd.read_csv(ex, sep=';', encoding='latin1', chunksize=100000):
-            filtro = chunk[
-                (chunk['SG_UF_MUN'] == 'SP') &
-                (chunk['KG_LIQUIDO'] > 0) &
-                (chunk['CO_PAIS'] != 0)
-            ]
+    with open("importacoes_tabela.html", "w", encoding="utf-8") as f:
+        f.write(imp_html)
 
-            # Merge com municípios
-            filtro = filtro.merge(mun_df[['CO_MUN', 'NO_MUN_MIN']].drop_duplicates(), on='CO_MUN', how='left')
+    exportacoes_mensais = calcular_totais_mensais(exp_df, cidade)
+    importacoes_mensais = calcular_totais_mensais(imp_df, cidade)
 
-            # Merge com países
-            filtro = filtro.merge(pais_df[['CO_PAIS', 'NO_PAIS']].drop_duplicates(), on='CO_PAIS', how='left')
+    meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+    fig = go.Figure()
 
-            # Merge com tipo de carga
-            filtro = filtro.merge(sh4_df[['SH4', 'TIPO_CARGA']].drop_duplicates(), on='SH4', how='left')
+    fig.add_trace(go.Scatter(
+        x=meses, y=exportacoes_mensais,
+        mode='lines+markers',
+        name='Exportações',
+        line=dict(color='limegreen', width=2),
+        marker=dict(size=8)
+    ))
 
-            # Calcula valor agregado
-            filtro['VALOR_AGREGADO'] = filtro['VL_FOB'] / filtro['KG_LIQUIDO']
-            filtro["VALOR_AGREGADO_FORMATADO"] = filtro["VALOR_AGREGADO"].apply(lambda x: f"{x:,.2f}")
+    fig.add_trace(go.Scatter(
+        x=meses, y=importacoes_mensais,
+        mode='lines+markers',
+        name='Importações',
+        line=dict(color='tomato', width=2),
+        marker=dict(size=8)
+    ))
 
+    fig.update_layout(
+        title=f"Exportações e Importações Mensais em {cidade.title()} ({ano})",
+        xaxis_title="Mês",
+        yaxis_title="Kg Líquido",
+        plot_bgcolor="#0B0121",
+        paper_bgcolor="#0B0121",
+        font=dict(color="white"),
+        xaxis=dict(showgrid=False),
+        yaxis=dict(showgrid=True, gridcolor="gray"),
+    )
 
-            # Organiza as colunas porque organização é importante
-            filtro.insert(filtro.columns.get_loc("CO_MUN") + 1, "NO_MUN_MIN", filtro.pop("NO_MUN_MIN"))
-            filtro.insert(filtro.columns.get_loc("CO_PAIS") + 1, "NO_PAIS", filtro.pop("NO_PAIS"))
-            filtro.insert(filtro.columns.get_loc("SH4") + 1, "TIPO_CARGA", filtro.pop("TIPO_CARGA"))
-
-            resultado.append(filtro)
-
-    except Exception as e:
-        print(f'Erro no ano 20{a}:', e)
-
-# Junta tudo no final, já limpo
-im_df = pd.concat(resultado, ignore_index=True)
-
-display(ex_df.sample(10))
+    html_output = fig.to_html(full_html=True)
+    with open("grafico_export_import.html", "w", encoding="utf-8") as f:
+        f.write(html_output)
