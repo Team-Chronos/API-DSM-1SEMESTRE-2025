@@ -22,8 +22,8 @@
         <a href="#home">Home</a>
         <a href="#mov">Movimentações</a>
         <a href="#tab">Tabela</a>
-        <a href="">Top 5</a>
-        <a class="ctt" href="">Contatos</a>
+        <a href="#top">Top 5</a>
+        <a class="ctt" href="#ctt">Contatos</a>
       </nav>
     </header>
     <main>
@@ -50,9 +50,12 @@
 
         <div class="mov-container" id="mov">
           <menu class="menu-mov">
-            <button class="fil-mun">
-              Município <img src="../static/img/seta.svg" class="seta" />
-            </button>
+            <select class="fil-mun">
+              <option value="Município">Município</option>
+              <option value="SJC">SJC</option>
+              <option value="SP">São Paulo</option>
+              <option value="JAC">Jacarei</option>
+            </select>
 
             <div class="carousel">
               <div class="arrowL" id="prevArrow">◀</div>
@@ -105,41 +108,141 @@
             </thead>
             <tbody>
               <tr>
-                <td>123456</td>
-                <td>Açúcar refinado</td>
-                <td>Ribeirão Preto - SP</td>
-                <td>150.000,00</td>
+                <td><div>123456</div></td>
+                <td><div>Açúcar refinado</div></td>
+                <td><div>Ribeirão Preto - SP</div></td>
+                <td><div>150.000,00</div></td>
               </tr>
               <tr>
-                <td>789012</td>
-                <td>Café em grão</td>
-                <td>Santos - SP</td>
-                <td>120.000,00</td>
+                <td><div>789012</div></td>
+                <td><div>Café em grão</div></td>
+                <td><div>Santos - SP</div></td>
+                <td><div>120.000,00</div></td>
               </tr>
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td><div>345678</div></td>
+                <td><div>Milho</div></td>
+                <td><div>Araraquara - SP</div></td>
+                <td><div>95.000,00</div></td>
               </tr>
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td><div>901234</div></td>
+                <td><div>Soja</div></td>
+                <td><div>Presidente Prudente - SP</div></td>
+                <td><div>180.000,00</div></td>
               </tr>
               <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td><div>567890</div></td>
+                <td><div>Trigo</div></td>
+                <td><div>Campinas - SP</div></td>
+                <td><div>110.000,00</div></td>
               </tr>
+              
             </tbody>
           </table>
         </div>
+        <span class="linev"  id="top"></span>
+        <p class="txt4" >
+          Top 10 cargas mais exportadas <br>
+          por valor agregado<br>
+          (relação ano e municípios)
+        </p>
+        <div class="tob-container"> 
+          <menu class="menu-top">
+            
+            <select class="new-year">
+              <option value="Ano">Ano</option>
+              <option value="2024">2024</option>
+              <option value="2023">2023</option>
+              <option value="2022">2022</option>
+              <option value="2021">2021</option>
+              <option value="2020">2020</option>
+              <option value="2019">2019</option>
+            </select>
+            <select class="fil-mun-top">
+              <option value="Município">Município</option>
+              <option value="SJC">SJC</option>
+              <option value="SP">São Paulo</option>
+              <option value="JAC">Jacarei</option>
+            </select>
+            
+          </menu>
+            <div class="bar-chart">
+              <div class="chart-row">
+                <span class="label">Produto</span>
+                <div class="bar" style="width: 95%"></div>
+              </div>
+              <div class="chart-row">
+                <span class="label">Produto</span>
+                <div class="bar" style="width: 80%"></div>
+              </div>
+              <div class="chart-row">
+                <span class="label">Produto</span>
+                <div class="bar" style="width: 75%"></div>
+                
+              </div>
+              <div class="chart-row">
+                <span class="label">Produto</span>
+                <div class="bar" style="width: 60%"></div>
+              </div>
+              <div class="chart-row">
+                <span class="label">Produto</span>
+                <div class="bar" style="width: 50%"></div>
+              </div>
+              <div class="chart-row">
+                <span class="label">Produto</span>
+                <div class="bar" style="width: 48%"></div></div>
+                <div class="chart-row">
+                  <span class="label">Produto</span>
+                  <div class="bar" style="width: 37%"></div>
+                </div>
+                <div class="chart-row">
+                  <span class="label">Produto</span>
+                  <div class="bar" style="width: 30%"></div>
+                </div>
+                <div class="chart-row">
+                  <span class="label">Produto</span>
+                  <div class="bar" style="width: 25%"></div>
+                  
+                </div>
+                <div class="chart-row">
+                  <span class="label">Produto</span>
+                  <div class="bar" style="width: 15%"></div>
+                </div>
+                <div class="chart-row">
+                  <span class="label">Produto</span>
+                  <div class="bar" style="width: 10%"></div>
+                </div>
+                <div class="chart-row">
+                  <span class="label">Produto</span>
+                  <div class="bar" style="width: 5%"></div></div>
+              <div class="x-axis">
+                <span>0</span>
+                <span>20</span>
+                <span>40</span>
+                <span>60</span>
+                <span>80</span>
+                <span>100</span>
+              </div>
+            </div>
+          
+        </div>
       </section>
-    </main>
-
+      
+    
+    <hr>
+    
+  </main>
+  <footer id="ctt">
+      
+      
+    <p class="txt5">CONTATE-NOS</p>
+    <p class="txt6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. </p>
+    <a  class="txt7" href="https://mail.google.com/mail/?view=cm&fs=1&to=chronosteam@gmail.com&su=Assunto&body=Mensagem" target="_blank" >chronosteam@gmail.com</a>
+    <p class="direi">
+      © 2025. Todos os Direitos Reservados. Team Chronos. Desenvolvido por TC.</a>.
+  </p>
+  </footer>
     <script>
       const years = [2019, 2020, 2021, 2022, 2023, 2024];
       let currentIndex = 1;
