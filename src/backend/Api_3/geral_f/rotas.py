@@ -5,7 +5,7 @@ base_direcao = os.path.abspath(os.path.dirname(__file__))
 template_direcao = os.path.abspath('../../frontend/templates')
 static_direcao = os.path.join(base_direcao, '../../frontend/static')
 
-index_bp = Blueprint('index', __name__, template_folder=template_direcao, static_folder=static_direcao)
+index_bp = Blueprint('index', __name__, template_folder=template_direcao, static_folder=static_direcao,static_url_path='/static')
 
 @index_bp.route('/')
 def home():
