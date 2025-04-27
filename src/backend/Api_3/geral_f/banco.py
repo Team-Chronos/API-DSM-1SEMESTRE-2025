@@ -12,6 +12,6 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-    app.register_blueprint(index_bp)
+    app.register_blueprint(index_bp, url_prefix='/')
 
     return app
