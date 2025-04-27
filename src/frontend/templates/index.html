@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chronos</title>
-    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" href="{{'static', filename='css/style.css'}}" >
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,7 +15,7 @@
   <body>
     <header>
       <div class="logo-container">
-        <img class="logo-img" src="../static/img/logo.png" alt="Logo" />
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" />
         <p class="logo-text">Chronos</p>
       </div>
       <nav>
@@ -69,7 +69,7 @@
           </menu>
 
           <iframe
-            src="./grafico_interativo.html"
+            src="../../backend/Api_3/grafico_export_import.html"
             width="800"
             height="600"
             class="graf"
@@ -107,37 +107,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td><div>123456</div></td>
-                <td><div>Açúcar refinado</div></td>
-                <td><div>Ribeirão Preto - SP</div></td>
-                <td><div>150.000,00</div></td>
-              </tr>
-              <tr>
-                <td><div>789012</div></td>
-                <td><div>Café em grão</div></td>
-                <td><div>Santos - SP</div></td>
-                <td><div>120.000,00</div></td>
-              </tr>
-              <tr>
-                <td><div>345678</div></td>
-                <td><div>Milho</div></td>
-                <td><div>Araraquara - SP</div></td>
-                <td><div>95.000,00</div></td>
-              </tr>
-              <tr>
-                <td><div>901234</div></td>
-                <td><div>Soja</div></td>
-                <td><div>Presidente Prudente - SP</div></td>
-                <td><div>180.000,00</div></td>
-              </tr>
-              <tr>
-                <td><div>567890</div></td>
-                <td><div>Trigo</div></td>
-                <td><div>Campinas - SP</div></td>
-                <td><div>110.000,00</div></td>
-              </tr>
-              
+              {% for item in tabela_dados %}
+                <tr>
+                  <td><div>{{ item.codigo }}</div></td>
+                  <td><div>{{ item.produto }}</div></td>
+                  <td><div>{{ item.municipio }}</div></td>
+                  <td><div>{{ item.valor }}</div></td>
+                </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>
@@ -240,7 +217,7 @@
     <p class="txt6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. </p>
     <a  class="txt7" href="https://mail.google.com/mail/?view=cm&fs=1&to=chronosteam@gmail.com&su=Assunto&body=Mensagem" target="_blank" >chronosteam@gmail.com</a>
     <p class="direi">
-      © 2025. Todos os Direitos Reservados. Team Chronos. Desenvolvido por TC.</a>.
+      © 2025. Todos os Direitos Reservados. Team Chronos. Desenvolvido por TC.</a> .
   </p>
   </footer>
     <script>
