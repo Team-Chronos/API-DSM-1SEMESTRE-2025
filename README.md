@@ -129,7 +129,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>31/03/2025 - 04/04/2025</h5>
             </td>
             <td>
-                <h5>Em Andamento</h5>
+                <h5>Concluído</h5>
             </td>
         </tr>
         <tr>
@@ -140,7 +140,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>07/04/2025 - 27/04/2025</h5>
             </td>
             <td>
-                <h5>Não Iniciado</h5>
+                <h5>Concluído</h5>
             </td>
         </tr>
         <tr>
@@ -170,7 +170,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>Review</h5>
             </td>
             <td>
-                <h5>26/05/2025 - 28/05/2025</h5>
+                <h5>26/05/2025 - 30/05/2025</h5>
             </td>
             <td>
                 <h5>Não Iniciado</h5>
@@ -181,7 +181,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>Feira de Soluções</h5>
             </td>
             <td>
-                <h5>29/05/2025</h5>
+                <h5>17/06/2025</h5>
             </td>
             <td>
                 <h5>Não Iniciado</h5>
@@ -211,13 +211,25 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 
 - [✅] Implementação do Colab.
 
-- [✅] Implementação de filtros e gráficos funcionais.
+- [✅] Criação e implementação do filtro de ano.
+
+- [✅] Criação e implementação do filtro de cidade de origem.
+
+- [✅] Criação e implementação do filtro de mês.
 
 <br>
  
 ### Sprint 2:
 
-> ⚠️EM PLANEJAMENTO⚠️
+- [✅] Criação e implementação do filtro de tipo de carga.
+
+- [✅] Criação e implementação do filtro de país de destino.
+
+- [✅] Criação e implementação do filtros por valor agregado.
+
+- [✅] Criação e implementação do filtros por kg líquido.
+
+- [✅] Criação e conexão do banco de dados My Sql.
 
 <br>
 
@@ -234,7 +246,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 ## 💡 Protótipo
 #### Clique no link abaixo para visualizar o modelo do projeto.
 
-> [Protótipo do Projeto](https://www.figma.com/design/mc8GD7tXoYRSMAFkBeYB6c/Rascunho-de-site-1?node-id=0-1&p=f&t=gajjBhKlRLZUvRXe-0)
+> <a href="https://www.figma.com/design/mc8GD7tXoYRSMAFkBeYB6c/Rascunho-de-site-1?node-id=0-1&p=f&t=gajjBhKlRLZUvRXe-0" target="_blank">Protótipo do Produto</a>
 
 </span>
 
@@ -244,16 +256,13 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 
 ## 📊 Backlog do Produto
 #### Clique no link abaixo para visualizar o backlog do produto. 
-> [Backlog do Produto](https://docs.google.com/spreadsheets/d/1-0Zh1v0vcnkfRN7rujErL-irl_QGm3Aw/edit?usp=sharing&ouid=114130650311490093569&rtpof=true&sd=true)
+> <a href="https://1drv.ms/x/c/1d641dc3ff0a667d/ETTn_kcS7y9DrYVoLKRHPSoBLDIeg1XFQF3H6kwbM6CItQ?e=G0cl1h" target="_blank">Backlog do Produto</a>
 
 <details>
     <summary>Backlog - Sprint 1</summary>
     <br>
     <table>
         <tr>
-            <th>
-                Requisito do Parceiro
-            </th>
             <th>
                 Prioridade
             </th>
@@ -266,13 +275,21 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>RF1</h5>
+                <h5>ALTA</h5>
             </td>
             <td>
-                <h5>AlTA</h5>
+                <h5>Como usuário, quero que os arquivos sejam limpos no Google Colab, para que os dados estejam organizados e prontos para uso no sistema.</h5>
             </td>
             <td>
-                <h5>Como usuário, desejo visualizar a movimentação de exportações e identificar os valores agregados dos produtos movimentados para uma tomada de decisões dentro do âmbito de logística.</h5>
+                <h5>13</h5>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h5>ALTA</h5>
+            </td>
+            <td>
+                <h5>Como usuário, quero acessar essas visualizações por meio de um site, para que eu possa usar a ferramenta de forma prática e acessível.</h5>
             </td>
             <td>
                 <h5>8</h5>
@@ -280,13 +297,20 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>RF1</h5>
+                <h5>ALTA</h5>
             </td>
+            <td>
+                <h5>Como usuário, quero aplicar filtro de ano, para que eu possa personalizar as visualizações de acordo com meu interesse.</h5>
+            </td>
+            <td>
+                <h5>5</h5>
+            </td>
+         <tr>
             <td>
                 <h5>ALTA</h5>
             </td>
             <td>
-                <h5>Como usuário, desejo visualizar o desempenho comercial de um município comparado a outros vizinhos ou de porte semelhante para analisar o desempenho dos municípios.</h5>
+                <h5>Como usuário, quero aplicar filtro de cidade de origem, para que eu possa personalizar as visualizações de acordo com meu interesse.</h5>
             </td>
             <td>
                 <h5>5</h5>
@@ -294,17 +318,15 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>RF3</h5>
-            </td>
-            <td>
                 <h5>ALTA</h5>
             </td>
             <td>
-                <h5>Como usuário, desejo ver quais países têm aumentado a importação de produtos especifícos dos municípios paulistas para ter facilidade de visualização do mercado de exportações/importações.</h5>
+                <h5>Como usuário, quero aplicar filtro de mês, para que eu possa personalizar as visualizações de acordo com meu interesse.</h5>
             </td>
             <td>
-                <h5>13</h5>
+                <h5>5</h5>
             </td>
+        </tr>
         </tr>
     </table>
 
@@ -316,9 +338,6 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
     <table>
         <tr>
             <th>
-                Requisito do Parceiro
-            </th>
-            <th>
                 Prioridade
             </th>
             <th>
@@ -330,27 +349,10 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>RF4</h5>
-            </td>
-            <td>
                 <h5>ALTA</h5>
             </td>
             <td>
-                <h5>Como usuário, desejo ver como mudanças em políticas tarifárias ou acordos comerciais afetaram as exportações e importações para saber as modificações e correções do mercado.</h5>
-            </td>
-            <td>
-                <h5>8</h5>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h5>RF2</h5>
-            </td>
-            <td>
-                <h5>ALTA</h5>
-            </td>
-            <td>
-                <h5>Como usuário, desejo ver se os municípios concentram suas exportações/importações em poucos produtos ou apresentam uma pauta diversificada para ver as diversificações do mercado.</h5>
+                <h5>Como usuário, quero aplicar filtro de tipo de carga, para que eu possa personalizar as visualizações de acordo com meu interesse.</h5>
             </td>
             <td>
                 <h5>5</h5>
@@ -358,30 +360,57 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>RF2</h5>
-            </td>
-            <td>
                 <h5>ALTA</h5>
             </td>
             <td>
-                <h5>Como usuário, desejo ver quais são as principais vias de transporte utilizadas para escoar exportações e receber importações e como isso afeta os custos e a eficiência logística para analisar os meios de transporte e os locais de destino do produto.</h5>
+                <h5>Como usuário, quero aplicar filtro de país de destino, para que eu possa personalizar as visualizações de acordo com meu interesse.</h5>
             </td>
             <td>
-                <h5>8</h5>
+                <h5>5</h5>
             </td>
         </tr>
         <tr>
             <td>
-                <h5>RF5</h5>
+                <h5>ALTA</h5>
             </td>
+            <td>
+                <h5>Como usuário, quero aplicar filtros por valor agregado, para que eu possa personalizar as visualizações de acordo com meu interesse.</h5>
+            </td>
+            <td>
+                <h5>5</h5>
+            </td>
+        </tr>
+        <tr>
             <td>
                 <h5>ALTA</h5>
             </td>
             <td>
-                <h5>Como usuário, desejo ver os padrões sazonais nas exportações/importações de determinados produtos e como as empresas locais lidam com essas variações para saber os padrões de sazonalidade.</h5>
+                <h5>Como usuário, quero aplicar filtros por kg líquido, para que eu possa personalizar as visualizações de acordo com meu interesse.</h5>
             </td>
             <td>
-                <h5>8</h5>
+                <h5>5</h5>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h5>ALTA</h5>
+            </td>
+            <td>
+                <h5>Como usuário, quero importar os dados tratados para um banco MySql, para que os dados estejam disponíveis para serem consultados via aplicação.</h5>
+            </td>
+            <td>
+                <h5>3</h5>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h5>ALTA</h5>
+            </td>
+            <td>
+                <h5>Como usuário, quero conectar o site ao banco de dados, para que os dados sejam consultados em tempo real com base nos filtros aplicados.</h5>
+            </td>
+            <td>
+                <h5>13</h5>
             </td>
         </tr>
     </table>
@@ -394,9 +423,6 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 <table>
         <tr>
             <th>
-                Requisito do Parceiro
-            </th>
-            <th>
                 Prioridade
             </th>
             <th>
@@ -408,41 +434,10 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>RF6</h5>
-            </td>
-            <td>
                 <h5>ALTA</h5>
             </td>
             <td>
-                <h5>Como usuário, desejo ver como os produtos exportados se posicionam em termos de preço e qualidade nos mercados internacionais para analisar a competitividade do mercado de exportações/importações.</h5>
-            </td>
-            <td>
-                <h5>5</h5>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h5>RF2</h5>
-            </td>
-            <td>
-                <h5>ALTA</h5>
-            </td>
-            <td>
-                <h5>Como usuário, desejo ver quem são os principais fornecedores e clientes internacionais das empresas nos municípios e como essas relações impactam a economia local para mapear as cadeias produtivas.</h5>
-            </td>
-            <td>
-                <h5>5</h5>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h5>RF4</h5>
-            </td>
-            <td>
-                <h5>ALTA</h5>
-            </td>
-            <td>
-                <h5>Como usuário, desejo ver quais os riscos associados à dependência de mercados específicos ou de poucos parceiros comerciais para ter uma análise de riscos mais perto da exatidão.</h5>
+                <h5>Como usuário, quero visualizar um gráfico com Top 10 cargas, para que eu veja as que mais se destacam em valor agregado, kg líquido e cidade (usando kg líquido)</h5>
             </td>
             <td>
                 <h5>8</h5>
@@ -450,13 +445,32 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
         </tr>
         <tr>
             <td>
-                <h5>RF4</h5>
+                <h5>ALTA</h5>
             </td>
+            <td>
+                <h5>Como usuário, quero visualizar um gráfico com Top 10 cargas, para que eu veja as cidades com maior valor agregado, kg líquido e os tipos de carga exportados.</h5>
+            </td>
+            <td>
+                <h5>8</h5>
+            </td>
+        </tr>
+        <tr>
             <td>
                 <h5>ALTA</h5>
             </td>
             <td>
-                <h5>Como usuário, desejo ver com base em tendências históricas, quais são as projeções para o desempenho comercial dos municípios nos próximos anos para conseguir fazer projeções futuras.</h5>
+                <h5>Como usuário, quero visualizar um gráfico com Top 10 países, para que eu veja os principais destinos por tipo de carga e kg líquido.</h5>
+            </td>
+            <td>
+                <h5>5</h5>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h5>ALTA</h5>
+            </td>
+            <td>
+                <h5>Como usuário, quero visualizar a rota da carga (país de origem, país de destino e tipo de carga), para entender melhor o caminho que os produtos percorrem e analisar padrões logísticos.</h5>
             </td>
             <td>
                 <h5>8</h5>
@@ -537,14 +551,6 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
             </td>
             <td>
                 <h5>Samuel Henrique</h5>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h5>Dev Team</h5>
-            </td>
-            <td>
-                <h5>Vitor Vieira</h5>
             </td>
         </tr>
     </table>
