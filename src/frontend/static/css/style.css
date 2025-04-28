@@ -804,3 +804,8 @@ hr {
 
   transition: 1s;
 }
+
+.div-graf{
+  display: flex;
+  justify-content: center;
+}
