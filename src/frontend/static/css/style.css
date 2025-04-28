@@ -809,3 +809,7 @@ hr {
   display: flex;
   justify-content: center;
 }
+
+header .row:last-child {
+  justify-content: flex-end;
+}
