@@ -14,22 +14,26 @@
   </head>
   <body>
     <header>
-      <div class="logo-container">
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" />
-        <p class="logo-text">Chronos</p>
+      <div class="row">
+          <div class="logo-container">
+            <img class="logo-img" src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" />
+            <p class="logo-text">Chronos</p>
+          </div>
+          <div class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('active')">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
       </div>
-      <div class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('active')">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div> 
-      <nav>
-        <a href="#home">Home</a>
-        <a href="#mov">Movimentações</a>
-        <a href="#tab">Tabela</a>
-        <a href="#top">Top 5</a>
-        <a class="ctt" href="#ctt">Contatos</a>
-      </nav>
+      <div class="row">
+          <nav class="navbar">
+            <a href="#home" onclick="document.querySelector('.navbar').classList.toggle('active')">Home</a>
+            <a href="#mov" onclick="document.querySelector('.navbar').classList.toggle('active')">Movimentações</a>
+            <a href="#tab" onclick="document.querySelector('.navbar').classList.toggle('active')">Tabela</a>
+            <a href="#top" onclick="document.querySelector('.navbar').classList.toggle('active')">Top 10</a>
+            <a class="ctt" href="#ctt" onclick="document.querySelector('.navbar').classList.toggle('active')">Contatos</a>
+          </nav>
+      </div>
     </header>
     <main>
       <section class="section1" id="home">
@@ -73,12 +77,9 @@
             </div>
           </menu>
 
-          <iframe
-            src="../../backend/Api_3/grafico_export_import.html"
-            width="800"
-            height="600"
-            class="graf"
-          ></iframe>
+          <div class="div-graf">
+            <iframe src="./grafico_interativo.html" class="graf"></iframe>
+          </div>
         </div>
 
         <span class="linev"></span>
@@ -91,12 +92,18 @@
           <div class="dropdown">
             <label for="new-year">Ano:</label>
             <select id="new-year">
-              <option value="2024">2024</option>
-              <option value="2023">2023</option>
-              <option value="2022">2022</option>
-              <option value="2021">2021</option>
-              <option value="2020">2020</option>
-              <option value="2019">2019</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2014">2014</option>
+                <option value="2013">2013</option>
             </select>
             <input type="text" placeholder="Pesquisar" />
           </div>
@@ -140,6 +147,12 @@
               <option value="2021">2021</option>
               <option value="2020">2020</option>
               <option value="2019">2019</option>
+              <option value="2018">2018</option>
+              <option value="2017">2017</option>
+              <option value="2016">2016</option>
+              <option value="2015">2015</option>
+              <option value="2014">2014</option>
+              <option value="2013">2013</option>
             </select>
             <select class="fil-mun-top">
               <option value="Município">Município</option>
@@ -216,18 +229,16 @@
     
   </main>
   <footer id="ctt">
-      
-      
-    <p class="txt5">CONTATE-NOS</p>
-    <p class="txt6">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. </p>
-    <a  class="txt7" href="https://mail.google.com/mail/?view=cm&fs=1&to=chronosteam@gmail.com&su=Assunto&body=Mensagem" target="_blank" >chronosteam@gmail.com</a>
-    <p class="direi">
-      © 2025. Todos os Direitos Reservados. Team Chronos. Desenvolvido por TC.</a> .
-  </p>
+      <p class="txt5">CONTATE-NOS</p>
+      <p class="txt6">Caso ache algum erro ou tenha uma sugestão nos avise</p>
+      <a  class="txt7" href="https://mail.google.com/mail/?view=cm&fs=1&to=chronosteam@gmail.com&su=Assunto&body=Mensagem" target="_blank" >chronosteam@gmail.com</a>
+      <p class="direi">
+          © 2025. Todos os Direitos Reservados. Team Chronos. Desenvolvido por TC.</a>.
+      </p>
   </footer>
     <script>
-      const years = [2019, 2020, 2021, 2022, 2023, 2024];
-      let currentIndex = 1;
+      const years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
+      let currentIndex = 7;
 
       const prevArrow = document.getElementById("prevArrow");
       const nextArrow = document.getElementById("nextArrow");
