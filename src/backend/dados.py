@@ -1,4 +1,13 @@
+from sqlalchemy import create_engine
 import pandas as pd
+
+usuario = 'root'
+senha = ''
+host = 'localhost'
+porta = '3306'
+banco = 'bd_comercio_sp'
+
+engine = create_engine(f'mysql+pymysql://{usuario}:{senha}@{host}:{porta}/{banco}')
 
 # Link dos arquivos CSV auxiliares
 mun = 'https://balanca.economia.gov.br/balanca/bd/tabelas/UF_MUN.csv'
@@ -14,11 +23,10 @@ pais_df = pd.read_csv(pais, sep=";", usecols=['CO_PAIS', 'NO_PAIS'], encoding="l
 mun_df = mun_df.rename(columns={"CO_MUN_GEO": "CO_MUN"})
 sh4_df = sh4_df.rename(columns={"CO_SH4": "SH4", "NO_SH4_POR": "TIPO_CARGA"})
 
-# Tabela de Exportações
 resultado = []
 for a in range(13, 24 + 1):  # de 2013 a 2024
     ex = f'https://balanca.economia.gov.br/balanca/bd/comexstat-bd/mun/EXP_20{a}_MUN.csv'
-    print(f'Processando ano: 20{a}')
+    print(f'EXP: processando ano: 20{a}')
 
     try:
         for chunk in pd.read_csv(ex, sep=';', encoding='latin1', chunksize=100000):
@@ -55,14 +63,16 @@ for a in range(13, 24 + 1):  # de 2013 a 2024
 # Junta tudo no final, já limpo
 ex_df = pd.concat(resultado, ignore_index=True)
 
-# Tabela de Importações
+# Envia para uma tabela. Cria se não existir.
+ex_df.to_sql('exportacao', con=engine, if_exists='replace', index=False)
+
 resultado = []
 for a in range(13, 24 + 1):  # de 2013 a 2024
     im = f'https://balanca.economia.gov.br/balanca/bd/comexstat-bd/mun/IMP_20{a}_MUN.csv'
-    print(f'Processando ano: 20{a}')
+    print(f'IMP: processando ano: 20{a}')
 
     try:
-        for chunk in pd.read_csv(ex, sep=';', encoding='latin1', chunksize=100000):
+        for chunk in pd.read_csv(im, sep=';', encoding='latin1', chunksize=100000):
             filtro = chunk[
                 (chunk['SG_UF_MUN'] == 'SP') &
                 (chunk['KG_LIQUIDO'] > 0) &
@@ -95,3 +105,5 @@ for a in range(13, 24 + 1):  # de 2013 a 2024
 
 # Junta tudo no final, já limpo
 im_df = pd.concat(resultado, ignore_index=True)
+
+im_df.to_sql('importacao', con=engine, if_exists='replace', index=False)
