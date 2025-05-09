@@ -152,7 +152,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>28/04/2025 - 02/05/2025</h5>
             </td>
             <td>
-                <h5>Não Iniciado</h5>
+                <h5>Concluído</h5>
             </td>
         </tr>
         <tr>
@@ -163,7 +163,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>05/05/2025 - 25/05/2025</h5>
             </td>
             <td>
-                <h5>Não Iniciado</h5>
+                <h5>Em andamento</h5>
             </td>
         </tr>
         <tr>
@@ -230,13 +230,19 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 
 - [✅] Criação e implementação do filtros por kg líquido.
 
-- [✅] Criação e conexão do banco de dados My Sql.
+- [✅] Criação do banco de dados My Sql.
 
 <br>
 
 ### Sprint 3:
 
-> ⚠️EM PLANEJAMENTO⚠️
+- [❎] Conexão e deploy do banco de dados My Sql.
+
+- [❎] Criação e implementação dos gráficos funcionais ao site.
+
+- [❎] Criação e implementação das tabelas funcionais ao site.
+ 
+- [❎] Limpeza geral de código front e back.
  
 </span>
 
@@ -247,7 +253,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 ## 💡 Protótipo
 #### Clique no link abaixo para visualizar o modelo do projeto.
 
-> <a href="https://www.figma.com/design/mc8GD7tXoYRSMAFkBeYB6c/Rascunho-de-site-1?node-id=0-1&p=f&t=gajjBhKlRLZUvRXe-0" target="_blank">Protótipo do Produto</a>
+> <a href="https://www.figma.com/design/mc8GD7tXoYRSMAFkBeYB6c/Rascunho-de-site-1?node-id=0-1&p=f&t=gajjBhKlRLZUvRXe-0">Protótipo do Produto</a>
 
 </span>
 
@@ -258,7 +264,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 ## 💡 Colab
 #### Clique no link abaixo para visualizar o colab do protótipo.
 
-> <a href="https://colab.research.google.com/drive/1aWN-OI6syXCUm7__WN7sJGFusBUmCEvE" target="_blank">Colab</a>
+> <a href="https://colab.research.google.com/drive/1aWN-OI6syXCUm7__WN7sJGFusBUmCEvE">Colab</a>
 
 </span>
 
@@ -268,7 +274,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 
 ## 📊 Backlog do Produto
 #### Clique no link abaixo para visualizar o backlog do produto. 
-> <a href="https://1drv.ms/x/c/1d641dc3ff0a667d/ETTn_kcS7y9DrYVoLKRHPSoBLDIeg1XFQF3H6kwbM6CItQ?e=G0cl1h" target="_blank">Backlog do Produto</a>
+> <a href="https://1drv.ms/x/c/1d641dc3ff0a667d/ETTn_kcS7y9DrYVoLKRHPSoBLDIeg1XFQF3H6kwbM6CItQ?e=G0cl1h">Backlog do Produto</a>
 
 <details>
     <summary>Backlog - Sprint 1</summary>
