@@ -3,9 +3,7 @@
   padding: 0;
   font-family: Poppins;
 }
-main{
-  background-color: #0b0121;
-}
+
 body {
   font-family: Poppins;
   min-height: 100vh;
@@ -117,8 +115,14 @@ nav a.ctt:hover {
   color: #ffffff;
   margin-top: 117px;
 }
+#bg-gradient{
+background: linear-gradient(to bottom, #370c94, #0b0121);
+}
+#bg-solid{
+  background-color: #0b0121;
+}
 .section1 {
-  background: linear-gradient(to bottom, #370c94, #0b0121);
+  
   align-items: center;
   justify-content: center;
   color: white;
@@ -127,7 +131,7 @@ nav a.ctt:hover {
   padding-top: 100px;
 }
 .section2 {
-  background-color: #0b0121;
+  
   align-items: center;
   justify-content: center;
   color: white;

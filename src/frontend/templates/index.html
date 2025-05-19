@@ -31,155 +31,159 @@
   
 
   <main>
-    <section class="section1" id="home">
-      <p class="txt">Estatísticas de Comércio Exterior do <br />Estado de São Paulo</p>
-      <p class="txt2">
-        Esteja informado sobre as estatísticas de comércio exterior do estado
-        de São Paulo, com a análise e a mensuração das operações de exportação
-        realizadas pelo estado, um dos principais polos econômicos do Brasil.
-      </p>
-      <div class="scroll">SCROLL</div>
-    </section>
+    <div id="bg-gradient">
+      <section class="section1" id="home">
+        <p class="txt">Estatísticas de Comércio Exterior do <br />Estado de São Paulo</p>
+        <p class="txt2">
+          Esteja informado sobre as estatísticas de comércio exterior do estado
+          de São Paulo, com a análise e a mensuração das operações de exportação
+          realizadas pelo estado, um dos principais polos econômicos do Brasil.
+        </p>
+        <div class="scroll">SCROLL</div>
+      </section>
+    </div>
+    <div id="bg-solid">
+      <section id="graf-mov">
+        <a href="#apresentacao" class="components-scroll-circle js-scroll">
+          <span class="components-scroll-circle-icon"></span>
+        </a>
 
-    <section class="section2">
-      <a href="#apresentacao" class="components-scroll-circle js-scroll">
-        <span class="components-scroll-circle-icon"></span>
-      </a>
+        <h1 class="txt3">Movimentações realizadas entre 2019 a 2024<br />por município</h1>
 
-      <h1 class="txt3">Movimentações realizadas entre 2019 a 2024<br />por município</h1>
+        <div class="mov-container" id="mov">
+          <menu class="menu-mov">
+            <select class="fil-mun">
+              <option value="Município">Município</option>
+              <option value="SJC">SJC</option>
+              <option value="SP">São Paulo</option>
+              <option value="JAC">Jacarei</option>
+            </select>
 
-      <div class="mov-container" id="mov">
-        <menu class="menu-mov">
-          <select class="fil-mun">
-            <option value="Município">Município</option>
-            <option value="SJC">SJC</option>
-            <option value="SP">São Paulo</option>
-            <option value="JAC">Jacarei</option>
-          </select>
-
-          <div class="carousel">
-            <div class="arrowL" id="prevArrow">◀</div>
-            <div class="years">
-              <div class="year prev">2019</div>
-              <div class="year current">2020</div>
-              <div class="year next">2021</div>
+            <div class="carousel">
+              <div class="arrowL" id="prevArrow">◀</div>
+              <div class="years">
+                <div class="year prev">2019</div>
+                <div class="year current">2020</div>
+                <div class="year next">2021</div>
+              </div>
+              <div class="arrowR" id="nextArrow">▶</div>
             </div>
-            <div class="arrowR" id="nextArrow">▶</div>
-          </div>
-        </menu>
+          </menu>
 
-        <div class="div-graf">
-           <iframe src="{{url_for('static', filename='grafico_export_import.html')}}" class="graf"></iframe>
-        </div>
-      </div>
-
-      <span class="linev"></span>
-      <div class="line">
-        <hr class="lineh" />
-        <h1 class="linet">INFORMAÇÕES DE CARGA</h1>
-        <hr class="lineh" />
-      </div>
-
-      <div class="tab-container" id="tab"> 
-        <div class="dropdown">
-          <label for="new-year">Ano:</label>
-          <select id="new-year">
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
-            <option value="2019">2019</option>
-            <option value="2018">2018</option>
-            <option value="2017">2017</option>
-            <option value="2016">2016</option>
-            <option value="2015">2015</option>
-            <option value="2014">2014</option>
-            <option value="2013">2013</option>
-          </select>
-          <input type="text" placeholder="Pesquisar" />
-        </div>
-        <table class="tab">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th class="prod"><span class="pro">Produto</span></th>
-              <th>Município - UF</th>
-              <th><span class="va">Valor<br />Agregado (R$)</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in tabela_dados %}
-              <tr>
-                <td><div>{{ item.codigo }}</div></td>
-                <td><div>{{ item.produto }}</div></td>
-                <td><div>{{ item.municipio }}</div></td>
-                <td><div>{{ item.valor }}</div></td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-      <span class="linev" id="top"></span>
-      <p class="txt4">
-        Top 10 cargas mais exportadas <br>
-        por valor agregado<br>
-        (relação ano e municípios)
-      </p>
-
-      <div class="tob-container"> 
-        <menu class="menu-top">
-          <select class="new-year">
-            <option value="Ano">Ano</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
-            <option value="2019">2019</option>
-            <option value="2018">2018</option>
-            <option value="2017">2017</option>
-            <option value="2016">2016</option>
-            <option value="2015">2015</option>
-            <option value="2014">2014</option>
-            <option value="2013">2013</option>
-          </select>
-          <select class="fil-mun-top">
-            <option value="Município">Município</option>
-            <option value="SJC">SJC</option>
-            <option value="SP">São Paulo</option>
-            <option value="JAC">Jacarei</option>
-          </select>
-        </menu>
-        
-        <div class="bar-chart">
-          
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 85%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 80%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 75%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 60%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 50%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 48%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 37%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 30%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 25%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 15%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 10%"></div></div>
-          <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 5%"></div></div>
-
-          <div class="x-axis">
-            <span>0</span>
-            <span>20</span>
-            <span>40</span>
-            <span>60</span>
-            <span>80</span>
-            <span>100</span>
+          <div class="div-graf">
+            <iframe src="{{url_for('static', filename='grafico_export_import.html')}}" class="graf"></iframe>
           </div>
         </div>
-      </div>
-    </section>
-    
+      </section>
+      <section id="info-carga">
+          <span class="linev"></span>
+          <div class="line">
+            <hr class="lineh" />
+            <h1 class="linet">INFORMAÇÕES DE CARGA</h1>
+            <hr class="lineh" />
+          </div>
+
+          <div class="tab-container" id="tab"> 
+            <div class="dropdown">
+              <label for="new-year">Ano:</label>
+              <select id="new-year">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2014">2014</option>
+                <option value="2013">2013</option>
+              </select>
+              <input type="text" placeholder="Pesquisar" />
+            </div>
+            <table class="tab">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th class="prod"><span class="pro">Produto</span></th>
+                  <th>Município - UF</th>
+                  <th><span class="va">Valor<br />Agregado (R$)</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in tabela_dados %}
+                  <tr>
+                    <td><div>{{ item.codigo }}</div></td>
+                    <td><div>{{ item.produto }}</div></td>
+                    <td><div>{{ item.municipio }}</div></td>
+                    <td><div>{{ item.valor }}</div></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section id="top10">
+          <span class="linev" id="top"></span>
+          <p class="txt4">
+            Top 10 cargas mais exportadas <br>
+            por valor agregado<br>
+            (relação ano e municípios)
+          </p>
+
+          <div class="tob-container"> 
+            <menu class="menu-top">
+              <select class="new-year">
+                <option value="Ano">Ano</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2014">2014</option>
+                <option value="2013">2013</option>
+              </select>
+              <select class="fil-mun-top">
+                <option value="Município">Município</option>
+                <option value="SJC">SJC</option>
+                <option value="SP">São Paulo</option>
+                <option value="JAC">Jacarei</option>
+              </select>
+            </menu>
+            
+            <div class="bar-chart">
+              
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 85%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 80%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 75%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 60%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 50%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 48%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 37%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 30%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 25%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 15%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 10%"></div></div>
+              <div class="chart-row"><span class="label">Produto</span><div class="bar" style="width: 5%"></div></div>
+
+              <div class="x-axis">
+                <span>0</span>
+                <span>20</span>
+                <span>40</span>
+                <span>60</span>
+                <span>80</span>
+                <span>100</span>
+              </div>
+            </div>
+          </div>
+      </section>
+    </div>
     <hr>
   </main>
 
