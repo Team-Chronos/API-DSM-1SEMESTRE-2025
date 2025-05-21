@@ -8,7 +8,7 @@ body {
   font-family: Poppins;
   min-height: 100vh;
   width: 100vw;
-  background-image: linear-gradient(#370c94, #0b0121);
+  background-color: #0b0121;
   margin: 0;
 }
 header {
@@ -116,13 +116,14 @@ nav a.ctt:hover {
   margin-top: 117px;
 }
 #bg-gradient{
-background: linear-gradient(to bottom, #370c94, #0b0121);
+  background: linear-gradient(to bottom, #370c94, #0b0121);
+
 }
 #bg-solid{
-  background-color: #0b0121;
+  margin-top: 0px;
+  
 }
 .section1 {
-  
   align-items: center;
   justify-content: center;
   color: white;
