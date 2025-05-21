@@ -116,14 +116,15 @@ nav a.ctt:hover {
   margin-top: 117px;
 }
 #bg-gradient{
-  background: linear-gradient(to bottom, #370c94, #0b0121);
+background: linear-gradient(to bottom, #370c94, #0b0121);
 
 }
 #bg-solid{
-  margin-top: 0px;
-  
+ 
+  background-color: #0b0121;
 }
 .section1 {
+  
   align-items: center;
   justify-content: center;
   color: white;
