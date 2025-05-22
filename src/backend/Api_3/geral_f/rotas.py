@@ -3,13 +3,12 @@ from flask import Blueprint, render_template
 
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Caminho CORRETO para os estáticos (onde o Flask já procura)
-static_dir = os.path.join(base_dir, 'static')  # Agora aponta para api_3/static/
+static_dir = os.path.join(base_dir, '../../frontend/static') 
 
 index_bp = Blueprint('index', __name__,
                     template_folder=os.path.join(base_dir, '../../frontend/templates'),
-                    static_folder=static_dir,  # Mudei para usar o caminho local
-                    static_url_path='/static')  # Mantém como '/static'
+                    static_folder=static_dir,  
+                    static_url_path='/static')  
 
 @index_bp.route('/')
 def home():
@@ -17,7 +16,7 @@ def home():
         grafico_path = os.path.join(static_dir, 'grafico_export_import.html')
         tabela_path = os.path.join(static_dir, 'exportacoes_tabela.html')
         
-        print(f"Arquivos em static_dir: {os.listdir(static_dir)}")  # Debug
+        print(f"Arquivos em static_dir: {os.listdir(static_dir)}") 
         
         with open(grafico_path, encoding='utf-8') as f:
             grafico_html = f.read()
