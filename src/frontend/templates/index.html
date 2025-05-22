@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
   <header>
@@ -20,16 +21,15 @@
       <span></span>
       <span></span>
     </div>
-    <nav aria-label="Navegação principal"> 
+    <nav aria-label="Navegação principal" class="navbar"> 
       <a href="#home" onclick="toggleNav()">Home</a>
-        <a href="#mov" onclick="toggleNav()">Movimentações</a>
-        <a href="#tab" onclick="toggleNav()">Tabela</a>
-        <a href="#top" onclick="toggleNav()">Top 10</a>
-        <a class="ctt" href="#ctt" onclick="toggleNav()">Contatos</a>
+      <a href="#mov" onclick="toggleNav()">Movimentações</a>
+      <a href="#tab" onclick="toggleNav()">Tabela</a>
+      <a href="#top" onclick="toggleNav()">Top 10</a>
+      <a class="ctt" href="#ctt" onclick="toggleNav()">Contatos</a>
     </nav>
   </header>
   
-
   <main>
     <div id="bg-gradient">
       <section class="section1" id="home">
@@ -48,30 +48,30 @@
           <span class="components-scroll-circle-icon"></span>
         </a>
 
-        <h1 class="txt3">Movimentações realizadas entre 2019 a 2024<br />por município</h1>
+        <h1 class="txt3">Movimentações realizadas entre 2013 a 2024<br />por município</h1>
 
         <div class="mov-container" id="mov">
           <menu class="menu-mov">
-            <select class="fil-mun">
+            <select class="fil-mun" id="municipio">
               <option value="Município">Município</option>
-              <option value="SJC">SJC</option>
-              <option value="SP">São Paulo</option>
-              <option value="JAC">Jacarei</option>
+              {% for mun in municipios %}
+              <option value="{{ mun }}">{{ mun }}</option>
+              {% endfor %}
             </select>
 
             <div class="carousel">
               <div class="arrowL" id="prevArrow">◀</div>
               <div class="years">
-                <div class="year prev">2019</div>
-                <div class="year current">2020</div>
-                <div class="year next">2021</div>
+                <div class="year prev">{{ anos[-3] }}</div>
+                <div class="year current">{{ anos[-2] }}</div>
+                <div class="year next">{{ anos[-1] }}</div>
               </div>
               <div class="arrowR" id="nextArrow">▶</div>
             </div>
           </menu>
 
           <div class="div-graf">
-            <iframe src="{{url_for('static', filename='grafico_export_import.html')}}" class="graf"></iframe>
+            <div id="graficoMensal" class="graf"></div>
           </div>
         </div>
       </section>
@@ -87,18 +87,9 @@
             <div class="dropdown">
               <label for="new-year">Ano:</label>
               <select id="new-year">
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-                <option value="2020">2020</option>
-                <option value="2019">2019</option>
-                <option value="2018">2018</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
-                <option value="2014">2014</option>
-                <option value="2013">2013</option>
+                {% for ano in anos %}
+                <option value="{{ ano }}" {% if ano == ano_selecionado %}selected{% endif %}>{{ ano }}</option>
+                {% endfor %}
               </select>
               <input type="text" placeholder="Pesquisar" />
             </div>
@@ -131,6 +122,9 @@
             por valor agregado<br>
             (relação ano e municípios)
           </p>
+          <div class="div-graf">
+            <div id="graficoTopCargas" class="graf"></div>
+          </div>
       </section>
     </div>
     <hr>
@@ -146,14 +140,13 @@
   </footer>
 
   <script>
-    
     function toggleNav() {
-      document.querySelector('.navbar').classList.toggle('active');
+      document.querySelector('nav').classList.toggle('active');
     }
 
-   
-    const years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
-    let currentIndex = 7;
+    
+    const years = {{ anos|tojson }};
+    let currentIndex = years.length - 2; 
 
     const prevArrow = document.getElementById("prevArrow");
     const nextArrow = document.getElementById("nextArrow");
@@ -181,6 +174,103 @@
     });
 
     updateYears();
+
+    const meses = {{ meses|tojson }};
+    const exportacoes = {{ exportacoes|tojson }};
+    const importacoes = {{ importacoes|tojson }};
+
+    const trace1 = {
+    x: meses,
+    y: exportacoes,
+    name: 'Exportações',
+    type: 'scatter',
+    mode: 'lines+markers',
+    line: {
+        color: 'limegreen',
+        width: 2
+    },
+    marker: {
+        size: 6
+    }
+    };
+
+    const trace2 = {
+    x: meses,
+    y: importacoes,
+    name: 'Importações',
+    type: 'scatter',
+    mode: 'lines+markers',
+    line: {
+        color: 'tomato',
+        width: 2
+    },
+    marker: {
+        size: 6
+    }
+    };
+
+    const layoutMensal = {
+    title: 'Movimentações Mensais (kg)',
+    plot_bgcolor: '#0B0121',
+    paper_bgcolor: '#0B0121',
+    font: { color: 'white' },
+    xaxis: { title: 'Mês' },
+    yaxis: { title: 'Volume' }
+    };
+
+    Plotly.newPlot('graficoMensal', [trace1, trace2], layoutMensal);
+
+    const topCargas = {{ top_cargas|tojson }};
+    const tiposCarga = topCargas.map(item => item.TIPO_CARGA);
+    const valores = topCargas.map(item => parseFloat(item.valor_total.replace('R$ ', '').replace('.', '').replace(',', '.')));
+
+    const traceTop = {
+      x: valores,
+      y: tiposCarga,
+      type: 'bar',
+      orientation: 'h',
+      marker: {
+        color: 'rgba(55, 12, 148, 0.8)'
+      }
+    };
+
+    const layoutTop = {
+      title: 'Top Cargas Exportadas por Valor (R$)',
+      plot_bgcolor: '#0B0121',
+      paper_bgcolor: '#0B0121',
+      font: {color: 'white'},
+      xaxis: {title: 'Valor Total (R$)'},
+      yaxis: {title: 'Tipo de Carga', automargin: true}
+    };
+
+    Plotly.newPlot('graficoTopCargas', [traceTop], layoutTop);
+
+    document.getElementById('municipio').addEventListener('change', function() {
+      console.log('Município selecionado:', this.value);
+      
+    });
+
+    document.getElementById('new-year').addEventListener('change', function() {
+      console.log('Ano selecionado:', this.value);
+
+    });
   </script>
+  <script>
+  const toggle = document.getElementById("menu-toggle");
+  const navbar = document.getElementById("navbar");
+
+  toggle.addEventListener("click", () => {
+    navbar.classList.toggle("active");
+  });
+
+ 
+  const navLinks = navbar.querySelectorAll("a");
+  navLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      navbar.classList.remove("active");
+    });
+  });
+</script>
+
 </body>
 </html>
