@@ -12,16 +12,18 @@
 </head>
 <body>
   <header>
-    <div class="logo-container">
-      <img class="logo-img" src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" />
-      <h1 class="logo-text">Chronos</h1> 
+    <div id="felicidade">
+      <div class="logo-container">
+        <img class="logo-img" src="/static/img/logo.png" alt="Logo">
+        <h1 class="logo-text">Chronos</h1>
+      </div>
+      <div class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('active')">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
-    <div class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('active')">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <nav aria-label="Navegação principal" class="navbar"> 
+    <nav aria-label="Navegação principal" class="navbar active">
       <a href="#home" onclick="toggleNav()">Home</a>
       <a href="#mov" onclick="toggleNav()">Movimentações</a>
       <a href="#tab" onclick="toggleNav()">Tabela</a>

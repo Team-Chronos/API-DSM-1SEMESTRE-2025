@@ -29,6 +29,12 @@ header {
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+#felicidade{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
 .logo-container {
   display: flex;
   align-items: left;
@@ -59,6 +65,7 @@ header {
   color: #fff;
   font-size: 18px;
   transition: color 0.3s;
+  text-wrap-mode: nowrap;
 }
 
 .navbar a:hover {
@@ -201,12 +208,6 @@ header {
     height: 30px;
   }
 
-  footer {
-    padding: 10px 0;
-    gap: 10px;
-
-  }
-
   .txt5 {
     font-size: 22px;
   }
@@ -214,7 +215,7 @@ header {
   .txt6 {
     font-size: 14px;
   }
-}  
+}
 .txt {
   text-align: center;
   font-family: Poppins;
@@ -379,6 +380,7 @@ header {
   gap: 20px;
   width: 200px;
   padding: 20px 30px;
+  color: whitesmoke;
 }
 
 .year {
@@ -456,6 +458,7 @@ header {
   align-items: center;
   justify-content: center;
   margin-bottom: 50px;
+  color: whitesmoke;
 }
 
 .lineh {
