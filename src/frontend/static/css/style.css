@@ -18,15 +18,22 @@ body {
 }
 
 header {
+  position: fixed;
+  width: 100%;
+  font-family: Poppins;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 40px;
-  background-color: #0b012175;
+  padding-left: 4rem;
+  padding-right: 4rem;
   height: 80px;
-  position: relative;
-  z-index: 2;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background-color: #0b012175;
+  backdrop-filter: blur(10px);
+  
 }
 
 #felicidade{
@@ -56,6 +63,7 @@ header {
 
 .navbar {
   display: flex;
+  
   gap: 30px;
   align-items: center;
 }
@@ -122,6 +130,7 @@ header {
 
   .navbar.active {
     display: flex;
+
   }
 
   .navbar a {
@@ -815,4 +824,14 @@ hr {
 
 header .row:last-child {
   justify-content: flex-end;
+}
+
+nav a.ctt {
+  border: 1px solid white;
+  border-radius: 40px;
+  padding: 8px 30px;
+}
+nav a.ctt:hover {
+  background-color: #fff;
+  color: #370c94;
 }
