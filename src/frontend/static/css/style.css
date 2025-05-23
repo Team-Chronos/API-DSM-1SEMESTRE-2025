@@ -726,11 +726,11 @@ hr {
   }
   .dropdown input{
   font-size: 14px;
-    width: 305px;
+    width: 97%;
   }
   .dropdown label, .dropdown select  {
     font-size: 14px;
-    width: 310px;
+    width: 100%;
   }
 
   .bar-chart {
