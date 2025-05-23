@@ -9,6 +9,24 @@ from .banco import get_db_engine, generate_sample_data
 
 def configurar_rotas(app):
 
+    @app.route('/teste')
+    def testar():
+        tabelas = 'oi'
+        try:
+            engine = get_db_engine()
+            if engine:
+                with engine.connect() as conn:
+                    tabelas = pd.read_sql(text("SHOW TABLES"), conn)
+                    if 'exportacao' not in tabelas.values or 'importacao' not in tabelas.values:
+                        tabela_dados = generate_sample_data()
+                    else:
+                        tabela_dados = pd.read_sql(text("""
+                            select CO_ANO, sum(VL_FOB)/sum(KG_LIQUIDO) AS VALOR_AGREGADO_TOTAL FROM exportacao group by CO_ANO;
+                        """), conn).to_dict('records')
+        except Exception as e:
+            print(f"Erro ao obter dados: {e}")
+        return render_template("teste.html", testeBanco = tabela_dados)
+
     @app.route('/')
     def index():
         ano_selecionado = 2023
