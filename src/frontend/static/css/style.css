@@ -689,7 +689,7 @@ nav a.ctt:hover {
 .toggle-container {
   display: flex;
   margin: 10px 0;
-  border-radius: 20px;
+  border-radius: 5px;
   overflow: hidden;
   border: 1px solid #370C94;
 }
@@ -702,16 +702,12 @@ nav a.ctt:hover {
   cursor: pointer;
   transition: all 0.3s;
 }
-
+.toggle-btn:active {
+  background: #370C94;
+  color: white;
+}
 .toggle-btn.active {
   background: #370C94;
   color: white;
 }
 
-.toggle-btn:first-child {
-  border-radius: 20px 0 0 20px;
-}
-
-.toggle-btn:last-child {
-  border-radius: 0 20px 20px 0;
-}
