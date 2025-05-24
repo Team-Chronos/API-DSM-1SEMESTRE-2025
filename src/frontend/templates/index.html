@@ -64,9 +64,9 @@
             <div class="carousel">
               <div class="arrowL" id="prevArrow">◀</div>
               <div class="years">
-                <div class="year prev">{{ anos[-3] }}</div>
-                <div class="year current">{{ anos[-2] }}</div>
-                <div class="year next">{{ anos[-1] }}</div>
+                <div class="year prev">{{ anos[-3] if anos|length > 3 else "" }}</div>
+                <div class="year current">{{ anos[-2] if anos|length > 2 else "Todos" }}</div>
+                <div class="year next">{{ anos[-1] if anos|length > 1 else "" }}</div>
               </div>
               <div class="arrowR" id="nextArrow">▶</div>
             </div>
@@ -89,10 +89,15 @@
             <div class="dropdown">
               <label for="new-year">Ano:</label>
               <select id="new-year">
+                <option value="Todos">Todos os anos</option>
                 {% for ano in anos %}
                 <option value="{{ ano }}" {% if ano == ano_selecionado %}selected{% endif %}>{{ ano }}</option>
                 {% endfor %}
               </select>
+                <div class="toggle-container">
+                  <button class="toggle-btn {% if tipo_operacao == 'exportacao' %}active{% endif %}" data-tipo="exportacao">Exportação</button>
+                  <button class="toggle-btn {% if tipo_operacao == 'importacao' %}active{% endif %}" data-tipo="importacao">Importação</button>
+                </div>
               <input type="text" placeholder="Pesquisar" />
             </div>
             <table class="tab">
@@ -124,8 +129,39 @@
             por valor agregado<br>
             (relação ano e municípios)
           </p>
-          <div class="div-graf">
-            <div id="graficoTopCargas" class="graf"></div>
+          
+          <div class="mov-container">
+            <menu class="menu-mov">
+              <select class="fil-mun" id="top-municipio">
+                <option value="Todos">Todos Municípios</option>
+                {% for mun in municipios %}
+                <option value="{{ mun }}">{{ mun }}</option>
+                {% endfor %}
+              </select>
+              
+              <select class="fil-mun" id="top-carga">
+                <option value="Todas">Todas Cargas</option>
+                {% for carga in cargas %}
+                <option value="{{ carga }}">{{ carga }}</option>
+                {% endfor %}
+              </select>
+              
+              <select class="fil-mun" id="top-pais">
+                <option value="Todos">Todos Países</option>
+                {% for pais in paises %}
+                <option value="{{ pais }}">{{ pais }}</option>
+                {% endfor %}
+              </select>
+              
+              <div class="toggle-container">
+                <button class="toggle-btn active" data-tipo="exportacao">Exportação</button>
+                <button class="toggle-btn" data-tipo="importacao">Importação</button>
+              </div>
+            </menu>
+            
+            <div class="div-graf">
+              <div id="graficoTopCargas" class="graf"></div>
+            </div>
           </div>
       </section>
     </div>
@@ -147,7 +183,7 @@
     }
 
     
-    const years = {{ anos|tojson }};
+    const years = ['Todos', ...{{ anos|tojson }}];
     let currentIndex = years.length - 2; 
 
     const prevArrow = document.getElementById("prevArrow");
@@ -155,16 +191,21 @@
     const yearsContainer = document.querySelector(".years");
 
     function updateYears() {
+      const prevYear = currentIndex > 0 ? years[currentIndex - 1] : "";
+      const currentYear = years[currentIndex];
+      const nextYear = currentIndex < years.length - 1 ? years[currentIndex + 1] : "";
+      
       yearsContainer.innerHTML = 
-        `<div class="year prev">${years[currentIndex - 1] || ""}</div>
-         <div class="year current">${years[currentIndex]}</div>
-         <div class="year next">${years[currentIndex + 1] || ""}</div>`;
+        `<div class="year prev">${prevYear}</div>
+         <div class="year current">${currentYear}</div>
+         <div class="year next">${nextYear}</div>`;
     }
 
     prevArrow.addEventListener("click", () => {
       if (currentIndex > 0) {
         currentIndex--;
         updateYears();
+        atualizarDados();
       }
     });
 
@@ -172,6 +213,7 @@
       if (currentIndex < years.length - 1) {
         currentIndex++;
         updateYears();
+        atualizarDados();
       }
     });
 
@@ -249,12 +291,11 @@
 
     document.getElementById('municipio').addEventListener('change', function() {
       console.log('Município selecionado:', this.value);
-      
+      atualizarDados();
     });
 
     document.getElementById('new-year').addEventListener('change', function() {
       console.log('Ano selecionado:', this.value);
-
     });
   </script>
   <script>
@@ -272,7 +313,137 @@
       navbar.classList.remove("active");
     });
   });
+
+document.addEventListener('DOMContentLoaded', function() {
+  function atualizarDados() {
+    const municipio = document.getElementById('municipio').value;
+    const ano = document.querySelector('.year.current').textContent;
+    const tipo = document.querySelector('.toggle-btn.active').dataset.tipo;
+    
+    if (!municipio || municipio === "Município") return;
+    
+    fetch(`/filtrar?ano=${ano === 'Todos' ? 'Todos' : ano}&municipio=${municipio}&tipo=${tipo}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          const traces = [];
+          
+          if (data.tipo === 'exportacao' || data.tipo === 'todos') {
+            traces.push({
+              x: data.meses,
+              y: data.tipo === 'todos' ? data.exportacoes : data.valores,
+              name: 'Exportações',
+              type: 'scatter',
+              mode: 'lines+markers',
+              line: {
+                color: 'limegreen',
+                width: 2
+              },
+              marker: {
+                size: 6
+              }
+            });
+          }
+          
+          if (data.tipo === 'importacao' || data.tipo === 'todos') {
+            traces.push({
+              x: data.meses,
+              y: data.tipo === 'todos' ? data.importacoes : data.valores,
+              name: 'Importações',
+              type: 'scatter',
+              mode: 'lines+markers',
+              line: {
+                color: 'tomato',
+                width: 2
+              },
+              marker: {
+                size: 6
+              }
+            });
+          }
+
+          const layout = {
+            title: ano === 'Todos' ? 
+                  `Movimentações Mensais (Todos os anos)` : 
+                  `Movimentações Mensais (${ano})`,
+            plot_bgcolor: '#0B0121',
+            paper_bgcolor: '#0B0121',
+            font: { color: 'white' },
+            xaxis: { title: 'Mês' },
+            yaxis: { title: 'Volume (kg)' }
+          };
+
+          Plotly.newPlot('graficoMensal', traces, layout);
+          
+          const url = new URL(window.location.href);
+          url.searchParams.set('ano', ano);
+          url.searchParams.set('municipio', municipio);
+          url.searchParams.set('tipo', tipo);
+          window.history.pushState({}, '', url);
+        }
+      });
+  }
+
+  function atualizarTop10() {
+    const municipio = document.getElementById('top-municipio').value;
+    const carga = document.getElementById('top-carga').value;
+    const pais = document.getElementById('top-pais').value;
+    const tipo = document.querySelector('#top10 .toggle-btn.active').dataset.tipo;
+    
+    fetch(`/filtrar-top10?municipio=${municipio}&carga=${carga}&pais=${pais}&tipo=${tipo}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          const trace = {
+            x: data.valores,
+            y: data.cargas,
+            type: 'bar',
+            orientation: 'h',
+            marker: {
+              color: 'rgba(55, 12, 148, 0.8)'
+            }
+          };
+
+          const layout = {
+            title: `Top 10 Cargas ${tipo === 'exportacao' ? 'Exportadas' : 'Importadas'} por Valor (R$)`,
+            plot_bgcolor: '#0B0121',
+            paper_bgcolor: '#0B0121',
+            font: {color: 'white'},
+            xaxis: {title: 'Valor Total (R$)'},
+            yaxis: {title: 'Tipo de Carga', automargin: true}
+          };
+
+          Plotly.newPlot('graficoTopCargas', [trace], layout);
+        }
+      });
+  }
+
+  document.getElementById('top-municipio').addEventListener('change', atualizarTop10);
+  document.getElementById('top-carga').addEventListener('change', atualizarTop10);
+  document.getElementById('top-pais').addEventListener('change', atualizarTop10);
+  
+  document.querySelectorAll('#top10 .toggle-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#top10 .toggle-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      atualizarTop10();
+    });
+  });
+
+  document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      atualizarDados();
+    });
+  });
+
+  document.getElementById('new-year').addEventListener('change', function() {
+  });
+});
+
 </script>
+
 
 </body>
 </html>
