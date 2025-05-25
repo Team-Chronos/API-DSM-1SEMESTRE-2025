@@ -1,231 +1,376 @@
-from flask import render_template
+from flask import render_template, request, jsonify
 import pandas as pd
 from sqlalchemy.sql import text
 import plotly.graph_objects as go
 import plotly
 import json
-from .banco import get_db_engine, generate_sample_data
+from .banco import get_db_engine
+from threading import Lock
+from datetime import datetime
 
+# Dados em cache para melhor performance
+cache_data = {
+    'municipios': [],
+    'anos': [],
+    'top_produtos': [],
+    'top_cargas': [],
+    'dados_mensais': {'meses': [], 'exportacoes': [], 'importacoes': []},
+    'top_cargas_valor': [],
+    'paises': [],
+    'cargas': [],
+    'ultima_atualizacao': None
+}
+cache_lock = Lock()
 
 def configurar_rotas(app):
-
-    @app.route('/teste')
-    def testar():
-        tabelas = 'oi'
+    
+    def carregar_dados_iniciais():
+        """Carrega os dados iniciais do banco de dados para o cache"""
         try:
             engine = get_db_engine()
-            if engine:
-                with engine.connect() as conn:
-                    tabelas = pd.read_sql(text("SHOW TABLES"), conn)
-                    if 'exportacao' not in tabelas.values or 'importacao' not in tabelas.values:
-                        tabela_dados = generate_sample_data()
-                    else:
-                        tabela_dados = pd.read_sql(text("""
-                            select CO_ANO, sum(VL_FOB)/sum(KG_LIQUIDO) AS VALOR_AGREGADO_TOTAL FROM exportacao group by CO_ANO;
-                        """), conn).to_dict('records')
+            if not engine:
+                app.logger.error("Não foi possível conectar ao banco de dados")
+                return
+
+            with engine.connect() as conn:
+                # Carrega dados básicos
+                with cache_lock:
+                    cache_data['municipios'] = pd.read_sql(
+                        "SELECT DISTINCT NO_MUN_MIN FROM exportacao ORDER BY NO_MUN_MIN", 
+                        conn
+                    )['NO_MUN_MIN'].tolist()
+                    
+                    cache_data['anos'] = [int(ano) for ano in pd.read_sql(
+                        "SELECT DISTINCT CO_ANO FROM exportacao ORDER BY CO_ANO", 
+                        conn
+                    )['CO_ANO'].tolist()]
+                    
+                    cache_data['paises'] = pd.read_sql(
+                        "SELECT DISTINCT NO_PAIS FROM exportacao ORDER BY NO_PAIS", 
+                        conn
+                    )['NO_PAIS'].tolist()
+                    
+                    cache_data['cargas'] = pd.read_sql(
+                        "SELECT DISTINCT TIPO_CARGA FROM exportacao ORDER BY TIPO_CARGA", 
+                        conn
+                    )['TIPO_CARGA'].tolist()
+                    
+                    # Dados padrão
+                    ano_padrao = max(cache_data['anos']) if cache_data['anos'] else 2023
+                    municipio_padrao = 'São Paulo'
+                    
+                    # Carrega dados específicos
+                    carregar_dados_especificos(conn, ano_padrao, municipio_padrao)
+                    
+                    cache_data['ultima_atualizacao'] = datetime.now()
+                    
         except Exception as e:
-            print(f"Erro ao obter dados: {e}")
-        return render_template("teste.html", testeBanco = tabela_dados)
+            app.logger.error(f"Erro ao carregar dados iniciais: {e}")
+
+    def carregar_dados_especificos(conn, ano, municipio):
+        """Carrega dados específicos para um ano e município"""
+        try:
+            # Top produtos
+            cache_data['top_produtos'] = pd.read_sql(text("""
+                SELECT SH4 as codigo, TIPO_CARGA as produto, 
+                       NO_MUN_MIN as municipio, 
+                       CONCAT('R$ ', FORMAT(SUM(VL_FOB)/1000, 2), 'k') as valor
+                FROM exportacao 
+                WHERE CO_ANO = :ano AND NO_MUN_MIN = :municipio
+                GROUP BY SH4, TIPO_CARGA, NO_MUN_MIN
+                ORDER BY SUM(VL_FOB) DESC
+                LIMIT 10
+            """), conn, params={'ano': ano, 'municipio': municipio}).to_dict('records')
+            
+            # Top cargas
+            cache_data['top_cargas'] = pd.read_sql(text("""
+                SELECT TIPO_CARGA, 
+                       CONCAT('R$ ', FORMAT(SUM(VL_FOB)/1000000, 2), 'M') as valor_total,
+                       COUNT(DISTINCT NO_PAIS) as num_paises,
+                       CONCAT(FORMAT(SUM(KG_LIQUIDO)/1000, 0), 't') as kg_total
+                FROM exportacao
+                WHERE CO_ANO = :ano AND NO_MUN_MIN = :municipio
+                GROUP BY TIPO_CARGA 
+                ORDER BY SUM(VL_FOB) DESC 
+                LIMIT 10
+            """), conn, params={'ano': ano, 'municipio': municipio}).to_dict('records')
+            
+            # Dados mensais
+            processar_dados_mensais(conn, ano)
+            
+            # Top cargas por valor agregado
+            cache_data['top_cargas_valor'] = pd.read_sql(text("""
+                SELECT TIPO_CARGA, CO_ANO, NO_MUN_MIN, 
+                       SUM(VL_FOB)/NULLIF(SUM(KG_LIQUIDO), 0) AS valor_agregado
+                FROM exportacao
+                GROUP BY TIPO_CARGA, CO_ANO, NO_MUN_MIN
+                HAVING valor_agregado IS NOT NULL
+                ORDER BY valor_agregado DESC
+                LIMIT 10
+            """), conn).to_dict('records')
+
+            # Verifique se os dados foram carregados
+            app.logger.info(f"Top cargas valor: {cache_data['top_cargas_valor']}")
+            
+        except Exception as e:
+            app.logger.error(f"Erro ao carregar dados específicos: {e}")
+            raise
+
+    def processar_dados_mensais(conn, ano):
+        """Processa dados mensais de exportação e importação"""
+        try:
+            meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+            exportacoes = [0.0] * 12
+            importacoes = [0.0] * 12
+            
+            # Exportações
+            mensal_exp = pd.read_sql(text("""
+                SELECT CO_MES, SUM(VL_FOB) as valor
+                FROM exportacao
+                WHERE CO_ANO = :ano
+                GROUP BY CO_MES
+                ORDER BY CO_MES
+            """), conn, params={'ano': ano})
+            
+            for _, row in mensal_exp.iterrows():
+                mes = int(row['CO_MES']) - 1
+                if 0 <= mes < 12:
+                    exportacoes[mes] = float(row['valor'])
+            
+            # Importações
+            mensal_imp = pd.read_sql(text("""
+                SELECT CO_MES, SUM(VL_FOB) as valor
+                FROM importacao
+                WHERE CO_ANO = :ano
+                GROUP BY CO_MES
+                ORDER BY CO_MES
+            """), conn, params={'ano': ano})
+            
+            for _, row in mensal_imp.iterrows():
+                mes = int(row['CO_MES']) - 1
+                if 0 <= mes < 12:
+                    importacoes[mes] = float(row['valor'])
+            
+            cache_data['dados_mensais'] = {
+                'meses': meses,
+                'exportacoes': exportacoes,
+                'importacoes': importacoes
+            }
+            
+        except Exception as e:
+            app.logger.error(f"Erro ao processar dados mensais: {e}")
+            raise
+
+    # Carrega dados iniciais ao iniciar
+    with app.app_context():
+        carregar_dados_iniciais()
 
     @app.route('/')
     def index():
-        ano_selecionado = 2023
-        municipio_selecionado = 'São Paulo'
-        estado_selecionado = 'São Paulo'
-
+        """Rota principal que exibe os dashboards"""
         try:
-            engine = get_db_engine()
-            if engine:
-                with engine.connect() as conn:
-                    tabelas = pd.read_sql(text("SHOW TABLES"), conn)
-                    if 'exportacao' not in tabelas.values or 'importacao' not in tabelas.values:
-                        tabela_dados, top_cargas = generate_sample_data()
-                    else:
-                        tabela_dados = pd.read_sql(text("""
-                            SELECT CO_NCM as codigo, TIPO_CARGA as produto, 
-                                   CONCAT(NO_MUN_MIN, ' - ', SG_UF_NCM) as municipio,
-                                   CONCAT('R$ ', FORMAT(VL_FOB, 2, 'de_DE')) as valor
-                            FROM exportacoes
-                            WHERE YEAR(CO_DATA) = :ano AND NO_MUN_MIN = :municipio AND SG_UF_NCM = :estado
-                            LIMIT 5
-                        """), conn, params={
-                            'ano': ano_selecionado,
-                            'municipio': municipio_selecionado,
-                            'estado': estado_selecionado
-                        }).to_dict('records')
+            with cache_lock:
+                # Verifica se precisa atualizar o cache (a cada 1 hora)
+                if (cache_data['ultima_atualizacao'] is None or 
+                    (datetime.now() - cache_data['ultima_atualizacao']).total_seconds() > 3600):
+                    carregar_dados_iniciais()
 
-                        top_cargas = pd.read_sql(text("""
-                            SELECT 
-                                TIPO_CARGA,
-                                CONCAT('R$ ', FORMAT(SUM(VL_FOB), 2, 'de_DE')) as valor_total,
-                                COUNT(DISTINCT NO_PAIS) as num_paises,
-                                CONCAT(FORMAT(SUM(KG_LIQUIDO), 2, 'de_DE'), ' kg') as kg_total
-                            FROM exportacoes
-                            WHERE YEAR(CO_DATA) = :ano AND NO_MUN_MIN = :municipio AND SG_UF_NCM = :estado
-                            GROUP BY TIPO_CARGA ORDER BY SUM(VL_FOB) DESC LIMIT 5
-                        """), conn, params={
-                            'ano': ano_selecionado,
-                            'municipio': municipio_selecionado,
-                            'estado': estado_selecionado
-                        }).to_dict('records')
-            else:
-                tabela_dados, top_cargas = generate_sample_data()
+                # Prepara contexto seguro para o template
+                context = {
+                    'titulo': "Estatísticas de Comércio Exterior",
+                    'municipio_selecionado': 'São Paulo',
+                    'ano_selecionado': max(cache_data['anos']) if cache_data['anos'] else 2023,
+                    'tipo_operacao': 'exportacao',
+                    'tabela_dados': cache_data['top_produtos'] or [],
+                    'top_cargas': cache_data['top_cargas'] or [],
+                    'municipios': cache_data['municipios'] or [],
+                    'anos': cache_data['anos'] or [],
+                    'paises': cache_data['paises'] or [],
+                    'cargas': cache_data['cargas'] or [],
+                    'meses': cache_data['dados_mensais']['meses'] or [],
+                    'exportacoes': cache_data['dados_mensais']['exportacoes'] or [],
+                    'importacoes': cache_data['dados_mensais']['importacoes'] or [],
+                    'top_cargas_valor': cache_data['top_cargas_valor'] or []
+                }
+
+                # Cria gráficos apenas se houver dados
+                if cache_data['dados_mensais']['meses']:
+                    fig_linha = criar_grafico_linha()
+                    context['grafico_linha'] = json.dumps(fig_linha, cls=plotly.utils.PlotlyJSONEncoder)
+                
+                if cache_data['top_cargas_valor']:
+                    fig_barras = criar_grafico_barras()
+                    context['grafico_barras'] = json.dumps(fig_barras, cls=plotly.utils.PlotlyJSONEncoder)
+
+            return render_template('index.html', **context)
+
         except Exception as e:
-            print(f"Erro ao obter dados: {e}")
-            tabela_dados, top_cargas = generate_sample_data()
+            app.logger.error(f"Erro em /index: {e}")
+            return render_template('error.html', error=str(e)), 500
 
-        meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-        exportacoes = [i * 1000000 for i in range(1, 13)]
-        importacoes = [i * 800000 for i in range(1, 13)]
-
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=meses, y=exportacoes, mode='lines+markers', name='Exportações'))
-        fig.add_trace(go.Scatter(x=meses, y=importacoes, mode='lines+markers', name='Importações'))
-        fig.update_layout(
-            title='Exportações e Importações Mensais',
-            xaxis_title='Mês',
-            yaxis_title='Valor (R$)',
-            template='plotly_white'
+    def criar_grafico_linha():
+        """Cria gráfico de linhas para dados mensais"""
+        return go.Figure(
+            data=[
+                go.Scatter(
+                    x=cache_data['dados_mensais']['meses'],
+                    y=cache_data['dados_mensais']['exportacoes'],
+                    name='Exportações',
+                    line=dict(color='limegreen', width=2),
+                    hovertemplate='%{x}<br>R$ %{y:,.2f}<extra></extra>'
+                ),
+                go.Scatter(
+                    x=cache_data['dados_mensais']['meses'],
+                    y=cache_data['dados_mensais']['importacoes'],
+                    name='Importações',
+                    line=dict(color='tomato', width=2),
+                    hovertemplate='%{x}<br>R$ %{y:,.2f}<extra></extra>'
+                )
+            ],
+            layout=go.Layout(
+                title='Exportações e Importações Mensais (R$)',
+                plot_bgcolor='#0B0121',
+                paper_bgcolor='#0B0121',
+                font=dict(color='white'),
+                xaxis=dict(title='Mês'),
+                yaxis=dict(title='Valor (R$)'),
+                showlegend=True,
+                margin=dict(l=40, r=40, t=60, b=40)
+            )
         )
-        grafico_linha = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-        context = {
-            'titulo': "Estatísticas de Comércio Exterior",
-            'municipio_selecionado': municipio_selecionado,
-            'ano_selecionado': ano_selecionado,
-            'meses': meses,
-            'exportacoes': exportacoes,
-            'importacoes': importacoes,
-            'tabela_dados': tabela_dados,
-            'top_cargas': top_cargas,
-            'grafico_linha': grafico_linha,
-            'municipios': [
-    'Adamantina', 'Adolfo', 'Aguaí', 'Águas da Prata', 'Águas de Lindóia',
-    'Águas de Santa Bárbara', 'Águas de São Pedro', 'Agudos', 'Alambari', 'Alfredo Marcondes',
-    'Altair', 'Altinópolis', 'Alto Alegre', 'Alumínio', 'Álvares Florence',
-    'Álvares Machado', 'Álvaro de Carvalho', 'Alvinlândia', 'Americana', 'Américo Brasiliense',
-    'Américo de Campos', 'Amparo', 'Analândia', 'Andradina', 'Angatuba',
-    'Anhembi', 'Anhumas', 'Aparecida', 'Aparecida d\'Oeste', 'Apiaí',
-    'Araçariguama', 'Araçatuba', 'Araçoiaba da Serra', 'Aramina', 'Arandu',
-    'Arapeí', 'Araraquara', 'Araras', 'Arco-Íris', 'Arealva',
-    'Areias', 'Areiópolis', 'Ariranha', 'Artur Nogueira', 'Arujá',
-    'Aspásia', 'Assis', 'Atibaia', 'Auriflama', 'Avaí',
-    'Avanhandava', 'Avaré', 'Bady Bassitt', 'Balbinos', 'Bálsamo',
-    'Bananal', 'Barão de Antonina', 'Barbosa', 'Bariri', 'Barra Bonita',
-    'Barra do Chapéu', 'Barra do Turvo', 'Barretos', 'Barrinha', 'Barueri',
-    'Bastos', 'Batatais', 'Bauru', 'Bebedouro', 'Bento de Abreu',
-    'Bernardino de Campos', 'Bertioga', 'Bilac', 'Birigui', 'Biritiba-Mirim',
-    'Boa Esperança do Sul', 'Bocaina', 'Bofete', 'Boituva', 'Bom Jesus dos Perdões',
-    'Bom Sucesso de Itararé', 'Borá', 'Boracéia', 'Borborema', 'Borebi',
-    'Botucatu', 'Bragança Paulista', 'Braúna', 'Brejo Alegre', 'Brodowski',
-    'Brotas', 'Buri', 'Buritama', 'Buritizal', 'Cabrália Paulista',
-    'Cabreúva', 'Caçapava', 'Cachoeira Paulista', 'Caconde', 'Cafelândia',
-    'Caiabu', 'Caieiras', 'Caiuá', 'Cajamar', 'Cajati','Cajobi', 'Cajuru', 'Campina do Monte Alegre', 'Campinas', 'Campo Limpo Paulista',
-    'Campos do Jordão', 'Campos Novos Paulista', 'Cananéia', 'Canas', 'Cândido Mota',
-    'Cândido Rodrigues', 'Canitar', 'Capão Bonito', 'Capela do Alto', 'Capivari',
-    'Caraguatatuba', 'Carapicuíba', 'Cardoso', 'Casa Branca', 'Cássia dos Coqueiros',
-    'Castilho', 'Catanduva', 'Catiguá', 'Cedral', 'Cerqueira César',
-    'Cerquilho', 'Cesário Lange', 'Charqueada', 'Chavantes', 'Clementina',
-    'Colina', 'Colômbia', 'Conchal', 'Conchas', 'Cordeirópolis',
-    'Coroados', 'Coronel Macedo', 'Corumbataí', 'Cosmópolis', 'Cosmorama',
-    'Cotia', 'Cravinhos', 'Cristais Paulista', 'Cruzália', 'Cruzeiro',
-    'Cubatão', 'Cunha', 'Descalvado', 'Diadema', 'Dirce Reis',
-    'Divinolândia', 'Dobrada', 'Dois Córregos', 'Dolcinópolis', 'Dourado',
-    'Dracena', 'Duartina', 'Dumont', 'Echaporã', 'Eldorado',
-    'Elias Fausto', 'Elisiário', 'Embaúba', 'Embu das Artes', 'Embu-Guaçu',
-    'Emilianópolis', 'Engenheiro Coelho', 'Espírito Santo do Pinhal', 'Espírito Santo do Turvo', 'Estiva Gerbi',
-    'Estrela d\'Oeste', 'Estrela do Norte', 'Euclides da Cunha Paulista', 'Fartura', 'Fernandópolis',
-    'Fernando Prestes', 'Fernão', 'Ferraz de Vasconcelos', 'Flora Rica', 'Floreal',
-    'Florínea', 'Franca', 'Francisco Morato', 'Franco da Rocha', 'Gabriel Monteiro',
-    'Gália', 'Garça', 'Gastão Vidigal', 'Gavião Peixoto', 'General Salgado',
-    'Getulina', 'Glicério', 'Guaiçara', 'Guaimbê', 'Guaíra',
-    'Guapiaçu', 'Guapiara', 'Guará', 'Guaraçaí', 'Guaraci',
-    'Guarani d\'Oeste', 'Guarantã', 'Guararapes', 'Guararema', 'Guaratinguetá','Guareí', 'Guariba', 'Guarujá', 'Guarulhos', 'Guatapará',
-    'Guzolândia', 'Herculândia', 'Holambra', 'Hortolândia', 'Iacanga',
-    'Iacri', 'Iaras', 'Ibaté', 'Ibirá', 'Ibirarema',
-    'Ibitinga', 'Ibiúna', 'Icém', 'Iepê', 'Igaraçu do Tietê',
-    'Igarapava', 'Igaratá', 'Iguape', 'Ilha Comprida', 'Ilha Solteira',
-    'Ilhabela', 'Indaiatuba', 'Indiana', 'Indiaporã', 'Inúbia Paulista',
-    'Ipaussu', 'Iperó', 'Ipeúna', 'Ipiguá', 'Iporanga',
-    'Ipuã', 'Iracemápolis', 'Irapuã', 'Irapuru', 'Itaberá',
-    'Itaí', 'Itajobi', 'Itaju', 'Itanhaém', 'Itaóca',
-    'Itapecerica da Serra', 'Itapetininga', 'Itapeva', 'Itapevi', 'Itapira',
-    'Itapirapuã Paulista', 'Itápolis', 'Itaporanga', 'Itapuí', 'Itapura',
-    'Itaquaquecetuba', 'Itararé', 'Itariri', 'Itatiba', 'Itatinga',
-    'Itirapina', 'Itirapuã', 'Itobi', 'Itu', 'Itupeva',
-    'Ituverava', 'Jaborandi', 'Jaboticabal', 'Jacareí', 'Jaci',
-    'Jacupiranga', 'Jaguariúna', 'Jales', 'Jambeiro', 'Jandira',
-    'Jardinópolis', 'Jarinu', 'Jaú', 'Jeriquara', 'Joanópolis',
-    'João Ramalho', 'José Bonifácio', 'Júlio Mesquita', 'Jumirim', 'Jundiaí',
-    'Junqueirópolis', 'Juquiá', 'Juquitiba', 'Lagoinha', 'Laranjal Paulista',
-    'Lavínia', 'Lavrinhas', 'Leme', 'Lençóis Paulista', 'Limeira',
-    'Lindóia', 'Lins', 'Lorena', 'Lourdes', 'Louveira',
-    'Lucélia', 'Lucianópolis', 'Luís Antônio', 'Luiziânia', 'Lupércio','Lutécia', 'Macatuba', 'Macaubal', 'Macedônia', 'Magda',
-    'Mairinque', 'Mairiporã', 'Manduri', 'Marabá Paulista', 'Maracaí',
-    'Marapoama', 'Mariápolis', 'Marília', 'Marinópolis', 'Martinópolis',
-    'Matão', 'Mauá', 'Mendonça', 'Meridiano', 'Mesópolis',
-    'Miguelópolis', 'Mineiros do Tietê', 'Mira Estrela', 'Miracatu', 'Mirandópolis',
-    'Mirante do Paranapanema', 'Mirassol', 'Mirassolândia', 'Mococa', 'Mogi das Cruzes',
-    'Mogi Guaçu', 'Moji Mirim', 'Mombuca', 'Monções', 'Mongaguá',
-    'Monte Alegre do Sul', 'Monte Alto', 'Monte Aprazível', 'Monte Azul Paulista', 'Monte Castelo',
-    'Monte Mor', 'Monteiro Lobato', 'Morro Agudo', 'Morungaba', 'Motuca',
-    'Murutinga do Sul', 'Nantes', 'Narandiba', 'Natividade da Serra', 'Nazaré Paulista',
-    'Neves Paulista', 'Nhandeara', 'Nipoã', 'Nova Aliança', 'Nova Campina',
-    'Nova Canaã Paulista', 'Nova Castilho', 'Nova Europa', 'Nova Granada', 'Nova Guataporanga',
-    'Nova Independência', 'Nova Luzitânia', 'Nova Odessa', 'Novais', 'Novo Horizonte',
-    'Nuporanga', 'Ocauçu', 'Óleo', 'Olímpia', 'Onda Verde',
-    'Oriente', 'Orindiúva', 'Orlândia', 'Osasco', 'Oscar Bressane',
-    'Osvaldo Cruz', 'Ourinhos', 'Ouro Verde', 'Ouroeste', 'Pacaembu',
-    'Palestina', 'Palmares Paulista', 'Palmeira d\'Oeste', 'Palmital', 'Panorama',
-    'Paraguaçu Paulista', 'Paraibuna', 'Paraíso', 'Paranapanema', 'Paranapuã',
-    'Parapuã', 'Pardinho', 'Pariquera-Açu', 'Parisi', 'Patrocínio Paulista',
-    'Paulicéia', 'Paulínia', 'Paulistânia', 'Paulo de Faria', 'Pederneiras',
-    'Pedra Bela', 'Pedranópolis', 'Pedregulho', 'Pedreira', 'Pedrinhas Paulista','Pedro de Toledo', 'Penápolis', 'Pereira Barreto', 'Pereiras', 'Peruíbe',
-    'Piacatu', 'Piedade', 'Pilar do Sul', 'Pindamonhangaba', 'Pindorama',
-    'Pinhalzinho', 'Piquerobi', 'Piquete', 'Piracaia', 'Piracicaba',
-    'Piraju', 'Pirajuí', 'Pirangi', 'Pirapora do Bom Jesus', 'Pirapozinho',
-    'Pirassununga', 'Piratininga', 'Pitangueiras', 'Planalto', 'Platina',
-    'Poá', 'Poloni', 'Pompéia', 'Pongaí', 'Pontal',
-    'Pontalinda', 'Pontes Gestal', 'Populina', 'Porangaba', 'Porto Feliz',
-    'Porto Ferreira', 'Potim', 'Potirendaba', 'Pracinha', 'Pradópolis',
-    'Praia Grande', 'Pratânia', 'Presidente Alves', 'Presidente Bernardes', 'Presidente Epitácio',
-    'Presidente Prudente', 'Presidente Venceslau', 'Promissão', 'Quadra', 'Quatá',
-    'Queiroz', 'Queluz', 'Quintana', 'Rafard', 'Rancharia',
-    'Redenção da Serra', 'Regente Feijó', 'Reginópolis', 'Registro', 'Restinga',
-    'Ribeira', 'Ribeirão Bonito', 'Ribeirão Branco', 'Ribeirão Corrente', 'Ribeirão do Sul',
-    'Ribeirão dos Índios', 'Ribeirão Grande', 'Ribeirão Pires', 'Ribeirão Preto', 'Rifaina',
-    'Rincão', 'Rinópolis', 'Rio Claro', 'Rio das Pedras', 'Rio Grande da Serra',
-    'Riolândia', 'Riversul', 'Rosana', 'Roseira', 'Rubiácea',
-    'Rubinéia', 'Sabino', 'Sagres', 'Sales', 'Sales Oliveira',
-    'Salesópolis', 'Salmourão', 'Saltinho', 'Salto', 'Salto de Pirapora',
-    'Salto Grande', 'Sandovalina', 'Santa Adélia', 'Santa Albertina', 'Santa Bárbara d\'Oeste',
-    'Santa Branca', 'Santa Clara d\'Oeste', 'Santa Cruz da Conceição', 'Santa Cruz da Esperança', 'Santa Cruz das Palmeiras',
-    'Santa Cruz do Rio Pardo', 'Santa Ernestina', 'Santa Fé do Sul', 'Santa Gertrudes', 'Santa Isabel',
-    'Santa Lúcia', 'Santa Maria da Serra', 'Santa Mercedes', 'Santa Rita d\'Oeste', 'Santa Rita do Passa Quatro','Santa Rosa de Viterbo', 'Santa Salete', 'Santana da Ponte Pensa', 'Santana de Parnaíba', 'Santo Anastácio',
-    'Santo André', 'Santo Antônio da Alegria', 'Santo Antônio de Posse', 'Santo Antônio do Aracanguá', 'Santo Antônio do Jardim',
-    'Santo Antônio do Pinhal', 'Santo Expedito', 'Santópolis do Aguapeí', 'Santos', 'São Bento do Sapucaí',
-    'São Bernardo do Campo', 'São Caetano do Sul', 'São Carlos', 'São Francisco', 'São João da Boa Vista',
-    'São João das Duas Pontes', 'São João de Iracema', 'São João do Pau d\'Alho', 'São Joaquim da Barra', 'São José da Bela Vista',
-    'São José do Barreiro', 'São José do Rio Pardo', 'São José do Rio Preto', 'São José dos Campos', 'São Lourenço da Serra',
-    'São Luiz do Paraitinga', 'São Manuel', 'São Miguel Arcanjo', 'São Paulo', 'São Pedro',
-    'São Pedro do Turvo', 'São Roque', 'São Sebastião', 'São Sebastião da Grama', 'São Simão',
-    'São Vicente', 'Sarapuí', 'Sarutaiá', 'Sebastianópolis do Sul', 'Serra Azul',
-    'Serra Negra', 'Serrana', 'Sertãozinho', 'Sete Barras', 'Severínia',
-    'Silveiras', 'Socorro', 'Sorocaba', 'Sud Mennucci', 'Sumaré',
-    'Suzanápolis', 'Suzano', 'Tabapuã', 'Tabatinga', 'Taboão da Serra',
-    'Taciba', 'Taguaí', 'Taiaçu', 'Taiúva', 'Tambaú',
-    'Tanabi', 'Tapiraí', 'Tapiratiba', 'Taquaral', 'Taquaritinga',
-    'Taquarituba', 'Taquarivaí', 'Tarabai', 'Tarumã', 'Tatuí',
-    'Taubaté', 'Tejupá', 'Teodoro Sampaio', 'Terra Roxa', 'Tietê',
-    'Timburi', 'Torre de Pedra', 'Torrinha', 'Trabiju', 'Tremembé',
-    'Três Fronteiras', 'Tuiuti', 'Tupã', 'Tupi Paulista', 'Turiúba',
-    'Turmalina', 'Ubarana', 'Ubatuba', 'Ubirajara', 'Uchoa',
-    'União Paulista', 'Urânia', 'Uru', 'Urupês', 'Valentim Gentil','Valinhos', 'Valparaíso', 'Vargem', 'Vargem Grande do Sul', 'Vargem Grande Paulista',
-    'Várzea Paulista', 'Vera Cruz', 'Vinhedo', 'Viradouro', 'Vista Alegre do Alto',
-    'Vitória Brasil', 'Votorantim', 'Votuporanga', 'Zacarias'
-]
-,
-            'anos': list(range(2013, 2025))
-        }
+    def criar_grafico_barras():
+        """Cria gráfico de barras para top cargas"""
+        df_cargas = pd.DataFrame(cache_data['top_cargas_valor'])
+        
+        # Verifique se df_cargas contém dados
+        app.logger.info(f"DataFrame para gráfico de barras: {df_cargas}")
 
-        return render_template('index.html', **context)
+        if df_cargas.empty:
+            app.logger.warning("Não há dados para criar o gráfico de barras.")
+            return go.Figure()  # Retorna um gráfico vazio se não houver dados
+
+        return go.Figure(
+            data=[go.Bar(
+                y=df_cargas['TIPO_CARGA'].str.slice(0, 25) + ' - ' + df_cargas['NO_MUN_MIN'].str.slice(0, 25) + ' (' + df_cargas['CO_ANO'].astype(str) + ')',
+                x=df_cargas['valor_agregado'],
+                orientation='h',
+                marker=dict(color='rgba(55, 12, 148, 0.8)'),
+                hovertemplate='<b>%{y}</b><br>Valor Agregado: R$ %{x:,.2f}/kg<extra></extra>'
+            )],
+            layout=go.Layout(
+                title='Top 10 Cargas por Valor Agregado (R$/kg)',
+                plot_bgcolor='#0B0121',
+                paper_bgcolor='#0B0121',
+                font=dict(color='white'),
+                xaxis=dict(title='Valor Agregado (R$/kg)'),
+                yaxis=dict(title='Carga - Município (Ano)', automargin=True),
+                height=500,
+                margin=dict(l=200, r=40, t=60, b=40)
+            )
+        )
+
+    @app.route('/filtrar')
+    def filtrar():
+        """Filtra os dados com base nos parâmetros fornecidos"""
+        ano = request.args.get('ano', type=int)
+        municipio = request.args.get('municipio', 'Todos')
+        tipo = request.args.get('tipo', 'exportacao')
+
+        engine = get_db_engine()
+        with engine.connect() as conn:
+            table = 'exportacao' if tipo == 'exportacao' else 'importacao'
+            
+            query = text(f"""
+                SELECT TIPO_CARGA, 
+                       SUM(VL_FOB) as valor_total,
+                       COUNT(DISTINCT NO_PAIS) as num_paises
+                FROM {table}
+                WHERE 1=1
+            """)
+            
+            params = {}
+            
+            if ano:
+                query = text(str(query) + " AND CO_ANO = :ano")
+                params['ano'] = ano
+            
+            if municipio != 'Todos':
+                query = text(str(query) + " AND NO_MUN_MIN = :municipio")
+                params['municipio'] = municipio
+            
+            query = text(str(query) + """
+                GROUP BY TIPO_CARGA
+                ORDER BY valor_total DESC
+                LIMIT 10
+            """)
+            
+            result = conn.execute(query, params)
+            cargas = []
+            valores = []
+            
+            for row in result:
+                cargas.append(row['TIPO_CARGA'])
+                valores.append(float(row['valor_total']))
+            
+            return jsonify({
+                'success': True,
+                'cargas': cargas,
+                'valores': valores,
+                'tipo': tipo
+            })
+
+    @app.route('/filtrar-top10')
+    def filtrar_top10():
+        """Filtra os top 10 produtos/cargas"""
+        municipio = request.args.get('municipio', 'Todos')
+        carga = request.args.get('carga', 'Todas')
+        pais = request.args.get('pais', 'Todos')
+        tipo = request.args.get('tipo', 'exportacao')
+        
+        engine = get_db_engine()
+        with engine.connect() as conn:
+            table = 'exportacao' if tipo == 'exportacao' else 'importacao'
+            
+            query = text(f"""
+                SELECT TIPO_CARGA, 
+                       SUM(VL_FOB) as valor_total,
+                       COUNT(DISTINCT NO_PAIS) as num_paises
+                FROM {table}
+                WHERE 1=1
+            """)
+            
+            params = {}
+            
+            if municipio != 'Todos':
+                query = text(str(query) + " AND NO_MUN_MIN = :municipio")
+                params['municipio'] = municipio
+            
+            if carga != 'Todas':
+                query = text(str(query) + " AND TIPO_CARGA = :carga")
+                params['carga'] = carga
+            
+            if pais != 'Todos':
+                query = text(str(query) + " AND NO_PAIS = :pais")
+                params['pais'] = pais
+            
+            query = text(str(query) + """
+                GROUP BY TIPO_CARGA
+                ORDER BY valor_total DESC
+                LIMIT 10
+            """)
+            
+            result = conn.execute(query, params)
+            cargas = []
+            valores = []
+            
+            for row in result:
+                cargas.append(row['TIPO_CARGA'])
+                valores.append(float(row['valor_total']))
+            
+            return jsonify({
+                'success': True,
+                'cargas': cargas,
+                'valores': valores,
+                'tipo': tipo
+            })

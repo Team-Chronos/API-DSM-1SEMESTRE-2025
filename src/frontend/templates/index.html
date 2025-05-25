@@ -94,10 +94,10 @@
                 <option value="{{ ano }}" {% if ano == ano_selecionado %}selected{% endif %}>{{ ano }}</option>
                 {% endfor %}
               </select>
-                <div class="toggle-container">
-                  <button class="toggle-btn {% if tipo_operacao == 'exportacao' %}active{% endif %}" data-tipo="exportacao">Exportação</button>
-                  <button class="toggle-btn {% if tipo_operacao == 'importacao' %}active{% endif %}" data-tipo="importacao">Importação</button>
-                </div>
+              <div class="toggle-container">
+                <button class="toggle-btn {% if tipo_operacao == 'exportacao' %}active{% endif %}" data-tipo="exportacao">Exportação</button>
+                <button class="toggle-btn {% if tipo_operacao == 'importacao' %}active{% endif %}" data-tipo="importacao">Importação</button>
+              </div>
               <input type="text" placeholder="Pesquisar" />
             </div>
             <table class="tab">
@@ -178,11 +178,12 @@
   </footer>
 
   <script>
+    // Funções básicas
     function toggleNav() {
       document.querySelector('nav').classList.toggle('active');
     }
 
-    
+    // Configuração do carrossel de anos
     const years = ['Todos', ...{{ anos|tojson }}];
     let currentIndex = years.length - 2; 
 
@@ -224,42 +225,42 @@
     const importacoes = {{ importacoes|tojson }};
 
     const trace1 = {
-    x: meses,
-    y: exportacoes,
-    name: 'Exportações',
-    type: 'scatter',
-    mode: 'lines+markers',
-    line: {
+      x: meses,
+      y: exportacoes,
+      name: 'Exportações',
+      type: 'scatter',
+      mode: 'lines+markers',
+      line: {
         color: 'limegreen',
         width: 2
-    },
-    marker: {
+      },
+      marker: {
         size: 6
-    }
+      }
     };
 
     const trace2 = {
-    x: meses,
-    y: importacoes,
-    name: 'Importações',
-    type: 'scatter',
-    mode: 'lines+markers',
-    line: {
+      x: meses,
+      y: importacoes,
+      name: 'Importações',
+      type: 'scatter',
+      mode: 'lines+markers',
+      line: {
         color: 'tomato',
         width: 2
-    },
-    marker: {
+      },
+      marker: {
         size: 6
-    }
+      }
     };
 
     const layoutMensal = {
-    title: 'Movimentações Mensais (kg)',
-    plot_bgcolor: '#0B0121',
-    paper_bgcolor: '#0B0121',
-    font: { color: 'white' },
-    xaxis: { title: 'Mês' },
-    yaxis: { title: 'Volume' }
+      title: 'Movimentações Mensais (kg)',
+      plot_bgcolor: '#0B0121',
+      paper_bgcolor: '#0B0121',
+      font: { color: 'white' },
+      xaxis: { title: 'Mês' },
+      yaxis: { title: 'Volume' }
     };
 
     Plotly.newPlot('graficoMensal', [trace1, trace2], layoutMensal);
@@ -289,161 +290,180 @@
 
     Plotly.newPlot('graficoTopCargas', [traceTop], layoutTop);
 
+    // Event listeners
     document.getElementById('municipio').addEventListener('change', function() {
-      console.log('Município selecionado:', this.value);
       atualizarDados();
     });
 
     document.getElementById('new-year').addEventListener('change', function() {
-      console.log('Ano selecionado:', this.value);
+      // Implementar filtro por ano se necessário
     });
-  </script>
-  <script>
-  const toggle = document.getElementById("menu-toggle");
-  const navbar = document.getElementById("navbar");
 
-  toggle.addEventListener("click", () => {
-    navbar.classList.toggle("active");
-  });
-
- 
-  const navLinks = navbar.querySelectorAll("a");
-  navLinks.forEach(link => {
-    link.addEventListener("click", () => {
-      navbar.classList.remove("active");
-    });
-  });
-
-document.addEventListener('DOMContentLoaded', function() {
-  function atualizarDados() {
-    const municipio = document.getElementById('municipio').value;
-    const ano = document.querySelector('.year.current').textContent;
-    const tipo = document.querySelector('.toggle-btn.active').dataset.tipo;
-    
-    if (!municipio || municipio === "Município") return;
-    
-    fetch(`/filtrar?ano=${ano === 'Todos' ? 'Todos' : ano}&municipio=${municipio}&tipo=${tipo}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          const traces = [];
-          
-          if (data.tipo === 'exportacao' || data.tipo === 'todos') {
-            traces.push({
-              x: data.meses,
-              y: data.tipo === 'todos' ? data.exportacoes : data.valores,
-              name: 'Exportações',
-              type: 'scatter',
-              mode: 'lines+markers',
-              line: {
-                color: 'limegreen',
-                width: 2
-              },
-              marker: {
-                size: 6
-              }
-            });
-          }
-          
-          if (data.tipo === 'importacao' || data.tipo === 'todos') {
-            traces.push({
-              x: data.meses,
-              y: data.tipo === 'todos' ? data.importacoes : data.valores,
-              name: 'Importações',
-              type: 'scatter',
-              mode: 'lines+markers',
-              line: {
-                color: 'tomato',
-                width: 2
-              },
-              marker: {
-                size: 6
-              }
-            });
-          }
-
-          const layout = {
-            title: ano === 'Todos' ? 
-                  `Movimentações Mensais (Todos os anos)` : 
-                  `Movimentações Mensais (${ano})`,
-            plot_bgcolor: '#0B0121',
-            paper_bgcolor: '#0B0121',
-            font: { color: 'white' },
-            xaxis: { title: 'Mês' },
-            yaxis: { title: 'Volume (kg)' }
-          };
-
-          Plotly.newPlot('graficoMensal', traces, layout);
-          
-          const url = new URL(window.location.href);
-          url.searchParams.set('ano', ano);
-          url.searchParams.set('municipio', municipio);
-          url.searchParams.set('tipo', tipo);
-          window.history.pushState({}, '', url);
-        }
-      });
-  }
-
-  function atualizarTop10() {
-    const municipio = document.getElementById('top-municipio').value;
-    const carga = document.getElementById('top-carga').value;
-    const pais = document.getElementById('top-pais').value;
-    const tipo = document.querySelector('#top10 .toggle-btn.active').dataset.tipo;
-    
-    fetch(`/filtrar-top10?municipio=${municipio}&carga=${carga}&pais=${pais}&tipo=${tipo}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          const trace = {
-            x: data.valores,
-            y: data.cargas,
-            type: 'bar',
-            orientation: 'h',
-            marker: {
-              color: 'rgba(55, 12, 148, 0.8)'
+    // Funções de atualização
+    function atualizarDados() {
+      const municipio = document.getElementById('municipio').value;
+      const ano = document.querySelector('.year.current').textContent;
+      const tipo = document.querySelector('.toggle-btn.active').dataset.tipo;
+      
+      if (!municipio || municipio === "Município") return;
+      
+      fetch(`/filtrar?ano=${ano === 'Todos' ? 'Todos' : ano}&municipio=${municipio}&tipo=${tipo}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const traces = [];
+            
+            if (data.tipo === 'exportacao' || data.tipo === 'todos') {
+              traces.push({
+                x: data.meses,
+                y: data.tipo === 'todos' ? data.exportacoes : data.valores,
+                name: 'Exportações',
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: {
+                  color: 'limegreen',
+                  width: 2
+                },
+                marker: {
+                  size: 6
+                }
+              });
             }
-          };
+            
+            if (data.tipo === 'importacao' || data.tipo === 'todos') {
+              traces.push({
+                x: data.meses,
+                y: data.tipo === 'todos' ? data.importacoes : data.valores,
+                name: 'Importações',
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: {
+                  color: 'tomato',
+                  width: 2
+                },
+                marker: {
+                  size: 6
+                }
+              });
+            }
 
-          const layout = {
-            title: `Top 10 Cargas ${tipo === 'exportacao' ? 'Exportadas' : 'Importadas'} por Valor (R$)`,
-            plot_bgcolor: '#0B0121',
-            paper_bgcolor: '#0B0121',
-            font: {color: 'white'},
-            xaxis: {title: 'Valor Total (R$)'},
-            yaxis: {title: 'Tipo de Carga', automargin: true}
-          };
+            const layout = {
+              title: ano === 'Todos' ? 
+                    `Movimentações Mensais (Todos os anos)` : 
+                    `Movimentações Mensais (${ano})`,
+              plot_bgcolor: '#0B0121',
+              paper_bgcolor: '#0B0121',
+              font: { color: 'white' },
+              xaxis: { title: 'Mês' },
+              yaxis: { title: 'Volume (kg)' }
+            };
 
-          Plotly.newPlot('graficoTopCargas', [trace], layout);
-        }
+            Plotly.newPlot('graficoMensal', traces, layout);
+            
+            const url = new URL(window.location.href);
+            url.searchParams.set('ano', ano);
+            url.searchParams.set('municipio', municipio);
+            url.searchParams.set('tipo', tipo);
+            window.history.pushState({}, '', url);
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao atualizar dados:', error);
+        });
+    }
+
+    function atualizarTop10() {
+      const municipio = document.getElementById('top-municipio').value;
+      const carga = document.getElementById('top-carga').value;
+      const pais = document.getElementById('top-pais').value;
+      const tipo = document.querySelector('#top10 .toggle-btn.active').dataset.tipo;
+      
+      fetch(`/filtrar-top10?municipio=${municipio}&carga=${carga}&pais=${pais}&tipo=${tipo}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const trace = {
+              x: data.valores,
+              y: data.cargas,
+              type: 'bar',
+              orientation: 'h',
+              marker: {
+                color: 'rgba(55, 12, 148, 0.8)'
+              }
+            };
+
+            const layout = {
+              title: `Top 10 Cargas ${tipo === 'exportacao' ? 'Exportadas' : 'Importadas'} por Valor (R$)`,
+              plot_bgcolor: '#0B0121',
+              paper_bgcolor: '#0B0121',
+              font: {color: 'white'},
+              xaxis: {title: 'Valor Total (R$)'},
+              yaxis: {title: 'Tipo de Carga', automargin: true}
+            };
+
+            Plotly.newPlot('graficoTopCargas', [trace], layout);
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao atualizar Top 10:', error);
+        });
+    }
+
+    // Configuração dos event listeners para filtros
+    document.getElementById('top-municipio').addEventListener('change', atualizarTop10);
+    document.getElementById('top-carga').addEventListener('change', atualizarTop10);
+    document.getElementById('top-pais').addEventListener('change', atualizarTop10);
+    
+    document.querySelectorAll('#top10 .toggle-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('#top10 .toggle-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        atualizarTop10();
       });
-  }
-
-  document.getElementById('top-municipio').addEventListener('change', atualizarTop10);
-  document.getElementById('top-carga').addEventListener('change', atualizarTop10);
-  document.getElementById('top-pais').addEventListener('change', atualizarTop10);
-  
-  document.querySelectorAll('#top10 .toggle-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('#top10 .toggle-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      atualizarTop10();
     });
-  });
 
-  document.querySelectorAll('.toggle-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      atualizarDados();
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        atualizarDados();
+      });
     });
-  });
+    
+    const topCargasValor = {{ top_cargas_valor|tojson }};
+    
+    const cargasLabels = topCargasValor.map(item => 
+      `${item.TIPO_CARGA} - ${item.NO_MUN_MIN} (${item.CO_ANO})`
+    );
+    const valoresAgregados = topCargasValor.map(item => item.valor_agregado);
 
-  document.getElementById('new-year').addEventListener('change', function() {
-  });
-});
+    const traceTopCargas = {
+      x: valoresAgregados,
+      y: cargasLabels,
+      type: 'bar',
+      orientation: 'h',
+      marker: {
+        color: 'rgba(75, 0, 130, 0.8)' 
+      },
+      hovertemplate: '<b>%{y}</b><br>Valor Agregado: R$ %{x:,.2f}/kg<extra></extra>'
+    };
 
-</script>
+    const layoutTopCargas = {
+      title: 'Top 10 Cargas por Valor Agregado (R$/kg)',
+      plot_bgcolor: '#0B0121',
+      paper_bgcolor: '#0B0121',
+      font: { color: 'white' },
+      xaxis: { title: 'Valor Agregado (R$/kg)' },
+      yaxis: { 
+        title: 'Carga - Município (Ano)',
+        automargin: true,
+        tickfont: { size: 10 }
+      },
+      margin: { l: 200, r: 40, t: 60, b: 40 },
+      height: 500
+    };
 
-
+    Plotly.newPlot('graficoTopCargas', [traceTopCargas], layoutTopCargas);
+  </script>
 </body>
 </html>
