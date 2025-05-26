@@ -514,6 +514,9 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
             <th>
                 Nome
             </th>
+            <th>
+                Contato
+            </th>
         </tr>
         <tr>
             <td>
@@ -521,6 +524,9 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
             </td>
             <td>
                 <h5>Enzo Gabriel</h5>
+            </td>
+            <td>
+                <a href="https://github.com/EnzoGabrielCode">[GitHub]</a>
             </td>
         </tr>
         <tr>
@@ -530,6 +536,9 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
             <td>
                 <h5>Rafael Sette</h5>
             </td>
+            <td>
+                <a href="https://github.com/Sette0o0">[GitHub]</a>
+            </td>
         </tr>
         <tr>
             <td>
@@ -537,6 +546,9 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
             </td>
             <td>
                 <h5>Rebeca Lima</h5>
+            </td>
+            <td>
+                <a href="https://github.com/rebeca-lima-ti">[GitHub]</a>
             </td>
         </tr>
         <tr>
@@ -546,6 +558,9 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
             <td>
                 <h5>João Vitor Moura</h5>
             </td>
+            <td>
+                <a href="https://github.com/JoaooMoura">[GitHub]</a>
+            </td>
         </tr>
         <tr>
             <td>
@@ -553,6 +568,9 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
             </td>
             <td>
                 <h5>Ana Julia Rubim</h5>
+            </td>
+            <td>
+                <a href="https://github.com/anajrubim">[GitHub]</a>
             </td>
         </tr>
         <tr>
@@ -562,6 +580,9 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
             <td>
                 <h5>Gabriel Lázaro</h5>
             </td>
+            <td>
+                <a href="https://github.com/gabsact4">[GitHub]</a>
+            </td>
         </tr>
         <tr>
             <td>
@@ -569,6 +590,9 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
             </td>
             <td>
                 <h5>Samuel Henrique</h5>
+            </td>
+            <td>
+                <a href="">[GitHub]</a>
             </td>
         </tr>
     </table>
