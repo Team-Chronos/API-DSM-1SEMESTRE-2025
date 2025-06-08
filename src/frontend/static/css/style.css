@@ -267,6 +267,14 @@ background: linear-gradient(to bottom, #370c94, #0b0121);
   background-color: #370c94;
   color: white;
   margin-bottom: 30px;
+  max-width: 30%;
+}
+
+.fil-mun :active{
+max-width: 30%;
+background-color: gray;
+color:white;
+
 }
 
 .graf {
@@ -477,14 +485,18 @@ table.tab {
 table.tab thead {
   background-color: #4b1c78;
   color: white;
+  max-width: 100px;
 }
+
 
 table.tab thead th {
   padding: 10px;
   font-size: 23px;
   text-align: center;
   font-weight: 200;
+  
 }
+
 
 table.tab thead th:first-child {
   border-top-left-radius: 10px;
@@ -508,14 +520,19 @@ table.tab tbody td > div {
   background-color: #D0D0D080;
   color: white;
   border-radius: 8px;
-  color: #fff;
   font-weight: 400;
   text-align: center;
-  max-height: 24px;
+  height: 70px;
+  display: flex;
+  justify-content: center;;
   overflow: hidden;
-  white-space: nowrap;
   vertical-align: middle;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: break-word; 
+  vertical-align: middle;
+  text-overflow: clip;
+  align-items:center;
+  max-width: 100%;
   font-size: clamp(7px, 2vw, 16px);
 }
 

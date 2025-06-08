@@ -1,5 +1,15 @@
-from sqlalchemy import create_engine
-import pandas as pd
+from sqlalchemy import create_engine, text
+from sqlalchemy.pool import QueuePool
+from sqlalchemy.exc import SQLAlchemyError, OperationalError
+import logging
+from threading import Lock
+import time
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 DB_CONFIG = {
     'usuario': 'admin',
@@ -9,29 +19,57 @@ DB_CONFIG = {
     'banco': 'db_comercio_sp'
 }
 
-def get_db_engine():
-    try:
-        engine = create_engine(
-            f"mysql+pymysql://{DB_CONFIG['usuario']}:{DB_CONFIG['senha']}@{DB_CONFIG['host']}:{DB_CONFIG['porta']}/{DB_CONFIG['banco']}"
-        )
-        return engine
-    except Exception as e:
-        print(f"Erro ao conectar ao banco de dados: {e}")
-        return None
+_engine = None
+_engine_lock = Lock()
+_last_connection_time = 0
+_connection_delay = 2
 
-def generate_sample_data():
-    tabela_dados = [
-        {'codigo': '854231', 'produto': 'Circuitos Integrados Eletrônicos', 'municipio': 'São Paulo - SP', 'valor': 'R$ 12.450.000,00'},
-        {'codigo': '870322', 'produto': 'Automóveis de Passageiros', 'municipio': 'São José dos Campos - SP', 'valor': 'R$ 8.730.500,00'},
-        {'codigo': '300490', 'produto': 'Medicamentos para Tratamento', 'municipio': 'Campinas - SP', 'valor': 'R$ 6.920.300,00'},
-        {'codigo': '847130', 'produto': 'Computadores Portáteis', 'municipio': 'São Paulo - SP', 'valor': 'R$ 5.410.200,00'},
-        {'codigo': '271019', 'produto': 'Óleos de Petróleo', 'municipio': 'Santos - SP', 'valor': 'R$ 4.980.600,00'}
-    ]
-    top_cargas = [
-        {'TIPO_CARGA': 'Circuitos Integrados', 'valor_total': 'R$ 58.200.000,00', 'num_paises': 15, 'kg_total': '1.250.000 kg'},
-        {'TIPO_CARGA': 'Veículos Automotores', 'valor_total': 'R$ 42.750.000,00', 'num_paises': 12, 'kg_total': '3.450.000 kg'},
-        {'TIPO_CARGA': 'Produtos Farmacêuticos', 'valor_total': 'R$ 32.180.000,00', 'num_paises': 8, 'kg_total': '850.000 kg'},
-        {'TIPO_CARGA': 'Equipamentos de TI', 'valor_total': 'R$ 28.950.000,00', 'num_paises': 10, 'kg_total': '1.120.000 kg'},
-        {'TIPO_CARGA': 'Derivados de Petróleo', 'valor_total': 'R$ 25.430.000,00', 'num_paises': 6, 'kg_total': '5.780.000 kg'}
-    ]
-    return tabela_dados, top_cargas
+def get_db_engine():
+    global _engine, _last_connection_time
+    current_time = time.time()
+    elapsed = current_time - _last_connection_time
+    if elapsed < _connection_delay:
+        time.sleep(_connection_delay - elapsed)
+    with _engine_lock:
+        _last_connection_time = time.time()
+        if _engine is not None:
+            try:
+                with _engine.connect() as conn:
+                    conn.execute(text("SELECT 1"))
+                return _engine
+            except OperationalError as e:
+                logger.warning(f"Conexão inválida, recriando engine: {str(e)}")
+                _engine.dispose()
+                _engine = None
+        try:
+            connection_string = (
+                f"mysql+pymysql://{DB_CONFIG['usuario']}:{DB_CONFIG['senha']}"
+                f"@{DB_CONFIG['host']}:{DB_CONFIG['porta']}/{DB_CONFIG['banco']}"
+                "?charset=utf8mb4&connect_timeout=10"
+            )
+            _engine = create_engine(
+                connection_string,
+                poolclass=QueuePool,
+                pool_size=5,      
+                max_overflow=2,   
+                pool_timeout=30,
+                pool_recycle=3600,
+                pool_pre_ping=True,
+                isolation_level="READ COMMITTED"
+            )
+            logger.info("Engine do banco de dados criado com sucesso")
+            return _engine
+        except SQLAlchemyError as e:
+            logger.error(f"Falha crítica ao criar engine: {str(e)}")
+            raise
+
+def close_db_engine():
+    global _engine
+    if _engine is not None:
+        try:
+            _engine.dispose()
+            logger.info("Engine do banco de dados descartado com sucesso")
+        except Exception as e:
+            logger.error(f"Erro ao descartar engine: {str(e)}")
+        finally:
+            _engine = None

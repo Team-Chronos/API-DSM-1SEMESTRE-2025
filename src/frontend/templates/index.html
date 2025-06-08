@@ -17,13 +17,13 @@
         <img class="logo-img" src="/static/img/logo.png" alt="Logo">
         <h1 class="logo-text">Chronos</h1>
       </div>
-      <div class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('active')">
+      <div class="menu-toggle" onclick="toggleNav()">
         <span></span>
         <span></span>
         <span></span>
       </div>
     </div>
-    <nav aria-label="Navegação principal" class="navbar active">
+    <nav aria-label="Navegação principal" class="navbar">
       <a href="#home" onclick="toggleNav()">Home</a>
       <a href="#mov" onclick="toggleNav()">Movimentações</a>
       <a href="#tab" onclick="toggleNav()">Tabela</a>
@@ -50,23 +50,23 @@
           <span class="components-scroll-circle-icon"></span>
         </a>
 
-        <h1 class="txt3">Movimentações realizadas entre 2013 a 2024<br />por município</h1>
+        <h1 class="txt3">Movimentações realizadas entre {{ anos[0] }} a {{ anos[-1] }}<br />por município</h1>
 
         <div class="mov-container" id="mov">
           <menu class="menu-mov">
             <select class="fil-mun" id="municipio">
-              <option value="Município">Município</option>
+              <option value="Todos">Todos Municípios</option>
               {% for mun in municipios %}
-              <option value="{{ mun }}">{{ mun }}</option>
+              <option value="{{ mun }}" {% if mun == municipio_selecionado %}selected{% endif %}>{{ mun }}</option>
               {% endfor %}
             </select>
 
             <div class="carousel">
               <div class="arrowL" id="prevArrow">◀</div>
               <div class="years">
-                <div class="year prev">{{ anos[-3] if anos|length > 3 else "" }}</div>
-                <div class="year current">{{ anos[-2] if anos|length > 2 else "Todos" }}</div>
-                <div class="year next">{{ anos[-1] if anos|length > 1 else "" }}</div>
+                <div class="year prev">{{ anos[-2] if anos|length > 2 else "" }}</div>
+                <div class="year current">{{ anos[-1] if anos|length > 1 else "Todos" }}</div>
+                <div class="year next"></div>
               </div>
               <div class="arrowR" id="nextArrow">▶</div>
             </div>
@@ -77,92 +77,94 @@
           </div>
         </div>
       </section>
+      
       <section id="info-carga">
-          <span class="linev"></span>
-          <div class="line">
-            <hr class="lineh" />
-            <h1 class="linet">INFORMAÇÕES DE CARGA</h1>
-            <hr class="lineh" />
-          </div>
+        <span class="linev"></span>
+        <div class="line">
+          <hr class="lineh" />
+          <h1 class="linet">INFORMAÇÕES DE CARGA</h1>
+          <hr class="lineh" />
+        </div>
 
-          <div class="tab-container" id="tab"> 
-            <div class="dropdown">
-              <label for="new-year">Ano:</label>
-              <select id="new-year">
-                <option value="Todos">Todos os anos</option>
-                {% for ano in anos %}
-                <option value="{{ ano }}" {% if ano == ano_selecionado %}selected{% endif %}>{{ ano }}</option>
-                {% endfor %}
-              </select>
-              <div class="toggle-container">
-                <button class="toggle-btn {% if tipo_operacao == 'exportacao' %}active{% endif %}" data-tipo="exportacao">Exportação</button>
-                <button class="toggle-btn {% if tipo_operacao == 'importacao' %}active{% endif %}" data-tipo="importacao">Importação</button>
-              </div>
-              <input type="text" placeholder="Pesquisar" />
+        <div class="tab-container" id="tab"> 
+          <div class="dropdown">
+            <label for="new-year">Ano:</label>
+            <select id="new-year">
+              <option value="Todos">Todos os anos</option>
+              {% for ano in anos %}
+              <option value="{{ ano }}" {% if ano == ano_selecionado %}selected{% endif %}>{{ ano }}</option>
+              {% endfor %}
+            </select>
+            <div class="toggle-container">
+              <button class="toggle-btn {% if tipo_operacao == 'exportacao' %}active{% endif %}" data-tipo="exportacao">Exportação</button>
+              <button class="toggle-btn {% if tipo_operacao == 'importacao' %}active{% endif %}" data-tipo="importacao">Importação</button>
             </div>
-            <table class="tab">
-              <thead>
+            <input type="text" id="pesquisa" placeholder="Pesquisar" />
+          </div>
+          <table class="tab">
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th class="prod"><span class="pro">Produto</span></th>
+                <th>Município - UF</th>
+                <th><span class="va">Valor<br />Agregado (R$)</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in tabela_dados %}
                 <tr>
-                  <th>Código</th>
-                  <th class="prod"><span class="pro">Produto</span></th>
-                  <th>Município - UF</th>
-                  <th><span class="va">Valor<br />Agregado (R$)</span></th>
+                  <td><div>{{ item.codigo }}</div></td>
+                  <td><div>{{ item.produto }}</div></td>
+                  <td><div>{{ item.municipio }}</div></td>
+                  <td><div>{{ item.valor }}</div></td>
                 </tr>
-              </thead>
-              <tbody>
-                {% for item in tabela_dados %}
-                  <tr>
-                    <td><div>{{ item.codigo }}</div></td>
-                    <td><div>{{ item.produto }}</div></td>
-                    <td><div>{{ item.municipio }}</div></td>
-                    <td><div>{{ item.valor }}</div></td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </section>
-        <section id="top10">
-          <span class="linev" id="top"></span>
-          <p class="txt4">
-            Top 10 cargas mais exportadas <br>
-            por valor agregado<br>
-            (relação ano e municípios)
-          </p>
-          
-          <div class="mov-container">
-            <menu class="menu-mov">
-              <select class="fil-mun" id="top-municipio">
-                <option value="Todos">Todos Municípios</option>
-                {% for mun in municipios %}
-                <option value="{{ mun }}">{{ mun }}</option>
-                {% endfor %}
-              </select>
-              
-              <select class="fil-mun" id="top-carga">
-                <option value="Todas">Todas Cargas</option>
-                {% for carga in cargas %}
-                <option value="{{ carga }}">{{ carga }}</option>
-                {% endfor %}
-              </select>
-              
-              <select class="fil-mun" id="top-pais">
-                <option value="Todos">Todos Países</option>
-                {% for pais in paises %}
-                <option value="{{ pais }}">{{ pais }}</option>
-                {% endfor %}
-              </select>
-              
-              <div class="toggle-container">
-                <button class="toggle-btn active" data-tipo="exportacao">Exportação</button>
-                <button class="toggle-btn" data-tipo="importacao">Importação</button>
-              </div>
-            </menu>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      
+      <section id="top10">
+        <span class="linev" id="top"></span>
+        <p class="txt4">
+          Top 10 cargas mais exportadas <br>
+          por valor agregado<br>
+          (relação ano e municípios)
+        </p>
+        
+        <div class="mov-container">
+          <menu class="menu-mov">
+            <select class="fil-mun" id="top-municipio">
+              <option value="Todos">Todos Municípios</option>
+              {% for mun in municipios %}
+              <option value="{{ mun }}">{{ mun }}</option>
+              {% endfor %}
+            </select>
             
-            <div class="div-graf">
-              <div id="graficoTopCargas" class="graf"></div>
+            <select class="fil-mun" id="top-carga">
+              <option value="Todas">Todas Cargas</option>
+              {% for carga in cargas %}
+              <option value="{{ carga }}">{{ carga[:25] ~ ('...' if carga|length > 25 else '') }}</option>
+              {% endfor %}
+            </select>
+            
+            <select class="fil-mun" id="top-pais">
+              <option value="Todos">Todos Países</option>
+              {% for pais in paises %}
+              <option value="{{ pais }}">{{ pais }}</option>
+              {% endfor %}
+            </select>
+            
+            <div class="toggle-container">
+              <button class="toggle-btn active" data-tipo="exportacao">Exportação</button>
+              <button class="toggle-btn" data-tipo="importacao">Importação</button>
             </div>
+          </menu>
+          
+          <div class="div-graf">
+            <div id="graficoTopCargas" class="graf"></div>
           </div>
+        </div>
       </section>
     </div>
     <hr>
@@ -173,139 +175,151 @@
     <p class="txt6">Caso ache algum erro ou tenha uma sugestão nos avise</p>
     <a class="txt7" href="https://mail.google.com/mail/?view=cm&fs=1&to=chronosteam@gmail.com&su=Assunto&body=Mensagem" target="_blank">chronosteam@gmail.com</a>
     <p class="direi">
-      © 2025. Todos os Direitos Reservados. Team Chronos. Desenvolvido por TC.
+      © {{ anos[-1] }}. Todos os Direitos Reservados. Team Chronos. Desenvolvido por TC.
     </p>
   </footer>
 
   <script>
-    // Funções básicas
     function toggleNav() {
       document.querySelector('nav').classList.toggle('active');
     }
 
-    // Configuração do carrossel de anos
-    const years = ['Todos', ...{{ anos|tojson }}];
-    let currentIndex = years.length - 2; 
-
-    const prevArrow = document.getElementById("prevArrow");
-    const nextArrow = document.getElementById("nextArrow");
-    const yearsContainer = document.querySelector(".years");
-
-    function updateYears() {
-      const prevYear = currentIndex > 0 ? years[currentIndex - 1] : "";
-      const currentYear = years[currentIndex];
-      const nextYear = currentIndex < years.length - 1 ? years[currentIndex + 1] : "";
+    document.addEventListener('DOMContentLoaded', function() {
+      const meses = {{ meses|tojson }};
+      const exportacoes = {{ exportacoes|tojson }};
+      const importacoes = {{ importacoes|tojson }};
+      const topCargasValor = {{ top_cargas_valor|tojson }};
+      const anos = {{ anos|tojson }};
       
-      yearsContainer.innerHTML = 
-        `<div class="year prev">${prevYear}</div>
-         <div class="year current">${currentYear}</div>
-         <div class="year next">${nextYear}</div>`;
-    }
+      const trace1 = {
+        x: meses,
+        y: exportacoes,
+        name: 'Exportações',
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { color: 'limegreen', width: 2 },
+        marker: { size: 6 },
+        hovertemplate: '%{x}<br>R$ %{y:,.2f}<extra></extra>'
+      };
 
-    prevArrow.addEventListener("click", () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        updateYears();
-        atualizarDados();
+      const trace2 = {
+        x: meses,
+        y: importacoes,
+        name: 'Importações',
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { color: 'tomato', width: 2 },
+        marker: { size: 6 },
+        hovertemplate: '%{x}<br>R$ %{y:,.2f}<extra></extra>'
+      };
+
+      const layoutMensal = {
+        title: 'Movimentações Mensais (R$)',
+        plot_bgcolor: '#0B0121',
+        paper_bgcolor: '#0B0121',
+        font: { color: 'white' },
+        xaxis: { title: 'Mês' },
+        yaxis: { title: 'Valor (R$)' },
+        showlegend: true,
+        margin: { l: 40, r: 40, t: 60, b: 40 }
+      };
+
+      Plotly.newPlot('graficoMensal', [trace1, trace2], layoutMensal);
+
+      // Gráfico de top cargas
+      if (topCargasValor && topCargasValor.length > 0) {
+        const cargasLabels = topCargasValor.map(item => 
+          `${item.TIPO_CARGA} - ${item.NO_MUN_MIN} (${item.CO_ANO})`
+        );
+        const valoresAgregados = topCargasValor.map(item => item.valor_agregado);
+
+        const traceTopCargas = {
+          x: valoresAgregados,
+          y: cargasLabels,
+          type: 'bar',
+          orientation: 'h',
+          marker: { color: 'rgba(55, 12, 148, 0.8)' },
+          hovertemplate: '<b>%{y}</b><br>Valor Agregado: R$ %{x:,.2f}/kg<extra></extra>'
+        };
+
+        const layoutTopCargas = {
+          title: 'Top 10 Cargas por Valor Agregado (R$/kg)',
+          plot_bgcolor: '#0B0121',
+          paper_bgcolor: '#0B0121',
+          font: { color: 'white' },
+          xaxis: { title: 'Valor Agregado (R$/kg)' },
+          yaxis: { 
+            title: 'Carga - Município (Ano)',
+            automargin: true,
+            tickfont: { size: 10 }
+          },
+          margin: { l: 200, r: 40, t: 60, b: 40 },
+          height: 500
+        };
+
+        Plotly.newPlot('graficoTopCargas', [traceTopCargas], layoutTopCargas);
+      } else {
+        Plotly.newPlot('graficoTopCargas', [], {
+          title: 'Nenhum dado disponível',
+          plot_bgcolor: '#0B0121',
+          paper_bgcolor: '#0B0121',
+          font: { color: 'white' }
+        });
       }
+
+      let currentIndex = anos.length - 1;
+      
+      function updateYears() {
+        const prevYear = currentIndex > 0 ? anos[currentIndex - 1] : "";
+        const currentYear = anos[currentIndex] || "Todos";
+        const nextYear = currentIndex < anos.length - 1 ? anos[currentIndex + 1] : "";
+        
+        document.querySelector('.year.prev').textContent = prevYear;
+        document.querySelector('.year.current').textContent = currentYear;
+        document.querySelector('.year.next').textContent = nextYear;
+      }
+
+      document.getElementById("prevArrow").addEventListener("click", () => {
+        if (currentIndex > 0) {
+          currentIndex--;
+          updateYears();
+          atualizarDados();
+        }
+      });
+
+      document.getElementById("nextArrow").addEventListener("click", () => {
+        if (currentIndex < anos.length - 1) {
+          currentIndex++;
+          updateYears();
+          atualizarDados();
+        }
+      });
+
+      document.getElementById('municipio').addEventListener('change', atualizarDados);
+      document.getElementById('new-year').addEventListener('change', atualizarTabela);
+      document.getElementById('pesquisa').addEventListener('input', filtrarTabela);
+      
+      document.querySelectorAll('.toggle-container .toggle-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          this.parentNode.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          if (this.closest('#top10')) {
+            atualizarTop10();
+          } else {
+            atualizarDados();
+          }
+        });
+      });
+
+      document.getElementById('top-municipio').addEventListener('change', atualizarTop10);
+      document.getElementById('top-carga').addEventListener('change', atualizarTop10);
+      document.getElementById('top-pais').addEventListener('change', atualizarTop10);
     });
 
-    nextArrow.addEventListener("click", () => {
-      if (currentIndex < years.length - 1) {
-        currentIndex++;
-        updateYears();
-        atualizarDados();
-      }
-    });
-
-    updateYears();
-
-    const meses = {{ meses|tojson }};
-    const exportacoes = {{ exportacoes|tojson }};
-    const importacoes = {{ importacoes|tojson }};
-
-    const trace1 = {
-      x: meses,
-      y: exportacoes,
-      name: 'Exportações',
-      type: 'scatter',
-      mode: 'lines+markers',
-      line: {
-        color: 'limegreen',
-        width: 2
-      },
-      marker: {
-        size: 6
-      }
-    };
-
-    const trace2 = {
-      x: meses,
-      y: importacoes,
-      name: 'Importações',
-      type: 'scatter',
-      mode: 'lines+markers',
-      line: {
-        color: 'tomato',
-        width: 2
-      },
-      marker: {
-        size: 6
-      }
-    };
-
-    const layoutMensal = {
-      title: 'Movimentações Mensais (kg)',
-      plot_bgcolor: '#0B0121',
-      paper_bgcolor: '#0B0121',
-      font: { color: 'white' },
-      xaxis: { title: 'Mês' },
-      yaxis: { title: 'Volume' }
-    };
-
-    Plotly.newPlot('graficoMensal', [trace1, trace2], layoutMensal);
-
-    const topCargas = {{ top_cargas|tojson }};
-    const tiposCarga = topCargas.map(item => item.TIPO_CARGA);
-    const valores = topCargas.map(item => parseFloat(item.valor_total.replace('R$ ', '').replace('.', '').replace(',', '.')));
-
-    const traceTop = {
-      x: valores,
-      y: tiposCarga,
-      type: 'bar',
-      orientation: 'h',
-      marker: {
-        color: 'rgba(55, 12, 148, 0.8)'
-      }
-    };
-
-    const layoutTop = {
-      title: 'Top Cargas Exportadas por Valor (R$)',
-      plot_bgcolor: '#0B0121',
-      paper_bgcolor: '#0B0121',
-      font: {color: 'white'},
-      xaxis: {title: 'Valor Total (R$)'},
-      yaxis: {title: 'Tipo de Carga', automargin: true}
-    };
-
-    Plotly.newPlot('graficoTopCargas', [traceTop], layoutTop);
-
-    // Event listeners
-    document.getElementById('municipio').addEventListener('change', function() {
-      atualizarDados();
-    });
-
-    document.getElementById('new-year').addEventListener('change', function() {
-      // Implementar filtro por ano se necessário
-    });
-
-    // Funções de atualização
     function atualizarDados() {
       const municipio = document.getElementById('municipio').value;
       const ano = document.querySelector('.year.current').textContent;
-      const tipo = document.querySelector('.toggle-btn.active').dataset.tipo;
-      
-      if (!municipio || municipio === "Município") return;
+      const tipo = document.querySelector('#graf-mov .toggle-btn.active').dataset.tipo;
       
       fetch(`/filtrar?ano=${ano === 'Todos' ? 'Todos' : ano}&municipio=${municipio}&tipo=${tipo}`)
         .then(response => response.json())
@@ -320,13 +334,9 @@
                 name: 'Exportações',
                 type: 'scatter',
                 mode: 'lines+markers',
-                line: {
-                  color: 'limegreen',
-                  width: 2
-                },
-                marker: {
-                  size: 6
-                }
+                line: { color: 'limegreen', width: 2 },
+                marker: { size: 6 },
+                hovertemplate: '%{x}<br>R$ %{y:,.2f}<extra></extra>'
               });
             }
             
@@ -337,13 +347,9 @@
                 name: 'Importações',
                 type: 'scatter',
                 mode: 'lines+markers',
-                line: {
-                  color: 'tomato',
-                  width: 2
-                },
-                marker: {
-                  size: 6
-                }
+                line: { color: 'tomato', width: 2 },
+                marker: { size: 6 },
+                hovertemplate: '%{x}<br>R$ %{y:,.2f}<extra></extra>'
               });
             }
 
@@ -355,16 +361,12 @@
               paper_bgcolor: '#0B0121',
               font: { color: 'white' },
               xaxis: { title: 'Mês' },
-              yaxis: { title: 'Volume (kg)' }
+              yaxis: { title: 'Valor (R$)' },
+              showlegend: true,
+              margin: { l: 40, r: 40, t: 60, b: 40 }
             };
 
             Plotly.newPlot('graficoMensal', traces, layout);
-            
-            const url = new URL(window.location.href);
-            url.searchParams.set('ano', ano);
-            url.searchParams.set('municipio', municipio);
-            url.searchParams.set('tipo', tipo);
-            window.history.pushState({}, '', url);
           }
         })
         .catch(error => {
@@ -383,13 +385,12 @@
         .then(data => {
           if (data.success) {
             const trace = {
-              x: data.valores,
-              y: data.cargas,
+              x: data.top_cargas.map(item => item.valor_total.replace(/[^\d.]/g, '')),
+              y: data.top_cargas.map(item => item.TIPO_CARGA),
               type: 'bar',
               orientation: 'h',
-              marker: {
-                color: 'rgba(55, 12, 148, 0.8)'
-              }
+              marker: { color: 'rgba(55, 12, 148, 0.8)' },
+              hovertemplate: '<b>%{y}</b><br>Valor Total: %{x}<extra></extra>'
             };
 
             const layout = {
@@ -398,7 +399,9 @@
               paper_bgcolor: '#0B0121',
               font: {color: 'white'},
               xaxis: {title: 'Valor Total (R$)'},
-              yaxis: {title: 'Tipo de Carga', automargin: true}
+              yaxis: {title: 'Tipo de Carga', automargin: true},
+              margin: { l: 200, r: 40, t: 60, b: 40 },
+              height: 500
             };
 
             Plotly.newPlot('graficoTopCargas', [trace], layout);
@@ -409,61 +412,43 @@
         });
     }
 
-    // Configuração dos event listeners para filtros
-    document.getElementById('top-municipio').addEventListener('change', atualizarTop10);
-    document.getElementById('top-carga').addEventListener('change', atualizarTop10);
-    document.getElementById('top-pais').addEventListener('change', atualizarTop10);
-    
-    document.querySelectorAll('#top10 .toggle-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('#top10 .toggle-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        atualizarTop10();
+    function atualizarTabela() {
+      const ano = document.getElementById('new-year').value;
+      const tipo = document.querySelector('#tab .toggle-btn.active').dataset.tipo;
+      
+      fetch(`/filtrar?ano=${ano}&tipo=${tipo}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const tbody = document.querySelector('.tab tbody');
+            tbody.innerHTML = '';
+            
+            data.tabela_dados.forEach(item => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td><div>${item.codigo}</div></td>
+                <td><div>${item.produto}</div></td>
+                <td><div>${item.municipio}</div></td>
+                <td><div>${item.valor}</div></td>
+              `;
+              tbody.appendChild(row);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao atualizar tabela:', error);
+        });
+    }
+
+    function filtrarTabela() {
+      const termo = document.getElementById('pesquisa').value.toLowerCase();
+      const linhas = document.querySelectorAll('.tab tbody tr');
+      
+      linhas.forEach(linha => {
+        const textoLinha = linha.textContent.toLowerCase();
+        linha.style.display = textoLinha.includes(termo) ? '' : 'none';
       });
-    });
-
-    document.querySelectorAll('.toggle-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        atualizarDados();
-      });
-    });
-    
-    const topCargasValor = {{ top_cargas_valor|tojson }};
-    
-    const cargasLabels = topCargasValor.map(item => 
-      `${item.TIPO_CARGA} - ${item.NO_MUN_MIN} (${item.CO_ANO})`
-    );
-    const valoresAgregados = topCargasValor.map(item => item.valor_agregado);
-
-    const traceTopCargas = {
-      x: valoresAgregados,
-      y: cargasLabels,
-      type: 'bar',
-      orientation: 'h',
-      marker: {
-        color: 'rgba(75, 0, 130, 0.8)' 
-      },
-      hovertemplate: '<b>%{y}</b><br>Valor Agregado: R$ %{x:,.2f}/kg<extra></extra>'
-    };
-
-    const layoutTopCargas = {
-      title: 'Top 10 Cargas por Valor Agregado (R$/kg)',
-      plot_bgcolor: '#0B0121',
-      paper_bgcolor: '#0B0121',
-      font: { color: 'white' },
-      xaxis: { title: 'Valor Agregado (R$/kg)' },
-      yaxis: { 
-        title: 'Carga - Município (Ano)',
-        automargin: true,
-        tickfont: { size: 10 }
-      },
-      margin: { l: 200, r: 40, t: 60, b: 40 },
-      height: 500
-    };
-
-    Plotly.newPlot('graficoTopCargas', [traceTopCargas], layoutTopCargas);
+    }
   </script>
 </body>
 </html>
