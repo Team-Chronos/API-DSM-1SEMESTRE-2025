@@ -51,7 +51,7 @@ def get_db_engine():
                 connection_string,
                 poolclass=QueuePool,
                 pool_size=5,      
-                max_overflow=2,   
+                max_overflow=10,   
                 pool_timeout=30,
                 pool_recycle=3600,
                 pool_pre_ping=True,
