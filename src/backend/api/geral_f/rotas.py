@@ -521,7 +521,6 @@ def configurar_rotas(app: Flask) -> Flask:
                         )
                         resultado.update(mensais)
 
-                        # Query para valor agregado
                         query_valor_agregado = text("""
                             SELECT 
                                 TIPO_CARGA,
