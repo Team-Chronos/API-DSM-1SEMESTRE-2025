@@ -1,6 +1,6 @@
 # API - Primeiro Semestre de DSM
 
-> Status: Em desenvolvimento ⚠️👷🏼 
+> Status: Concluído ✅
 
 Este projeto é uma API (Aprendizado por Projetos Integrados) desenvolvida durante o primeiro semestre do curso de Desenvolvimento de Software Multiplataforma da Fatec de São José dos Campos para monitoramento de tendências do mercado de importação e exportação no estado de São Paulo. Este projeto utiliza a metodologia ágil SCRUM, garantindo um desenvolvimento iterativo e colaborativo, tarefas organizadas em sprints, seguindo as prioridades definidas em um backlog estruturado com funcionalidades priorizadas.
 
@@ -163,7 +163,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>05/05/2025 - 25/05/2025</h5>
             </td>
             <td>
-                <h5>Em andamento</h5>
+                <h5>Concluído</h5>
             </td>
         </tr>
         <tr>
@@ -174,7 +174,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>26/05/2025 - 30/05/2025</h5>
             </td>
             <td>
-                <h5>Não Iniciado</h5>
+                <h5>Concluído</h5>
             </td>
         </tr>
         <tr>
@@ -185,7 +185,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
                 <h5>17/06/2025</h5>
             </td>
             <td>
-                <h5>Não Iniciado</h5>
+                <h5>Concluído</h5>
             </td>
         </tr>
     </table>
@@ -236,13 +236,13 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 
 ### Sprint 3:
 
-- [❎] Conexão e deploy do banco de dados My Sql.
+- [✅] Conexão e deploy do banco de dados My Sql.
 
-- [❎] Criação e implementação dos gráficos funcionais ao site.
+- [✅] Criação e implementação dos gráficos funcionais ao site.
 
-- [❎] Criação e implementação das tabelas funcionais ao site.
+- [✅] Criação e implementação das tabelas funcionais ao site.
  
-- [❎] Limpeza geral de código front e back.
+- [✅] Limpeza geral de código front e back.
  
 </span>
 
@@ -262,7 +262,7 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 <span id='colab'>
 
 ## 💡 Colab
-#### Clique no link abaixo para visualizar o colab do protótipo.
+#### Clique no link abaixo para visualizar o colab do projeto.
 
 > <a href="https://colab.research.google.com/drive/1aWN-OI6syXCUm7__WN7sJGFusBUmCEvE">Colab</a>
 
@@ -600,3 +600,4 @@ O objetivo do projeto é fornecer uma solução eficiente para monitorar as tend
 </span>
 
 <br>
+
